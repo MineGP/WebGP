@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  webgp:
+    image: ${DOCKER_REGISTRY-}webgp
+    container_name: WebGP
+    build:
+      context: .
+      dockerfile: WebGP/Dockerfile
+    networks:
+      - WebGP_Net
+networks:
+  WebGP_Net:
+    driver: bridge
