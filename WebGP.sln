@@ -5,13 +5,17 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP", "WebGP\WebGP.csproj", "{DA0CF8EE-D680-4691-92B9-FD2A2A597299}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGP.Application", "WebGP.Application\WebGP.Application.csproj", "{E1365FBE-527F-42D2-88A6-996BC2122FBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Application", "WebGP.Application\WebGP.Application.csproj", "{E1365FBE-527F-42D2-88A6-996BC2122FBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGP.Infrastructure", "WebGP.Infrastructure\WebGP.Infrastructure.csproj", "{3B497276-48B9-4B3B-AB58-F4D03027E7B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Infrastructure", "WebGP.Infrastructure\WebGP.Infrastructure.csproj", "{3B497276-48B9-4B3B-AB58-F4D03027E7B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGP.Domain", "WebGP.Domain\WebGP.Domain.csproj", "{79D97050-FD4A-4EAE-98D0-C603C43D70DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Domain", "WebGP.Domain\WebGP.Domain.csproj", "{79D97050-FD4A-4EAE-98D0-C603C43D70DC}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C0CB4CFE-196A-4FC5-ADD4-337F2D18555B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{801457E0-AEDA-4F7B-8A9C-827523ECAAD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4A82D7B3-2CC3-4857-9C5B-49AC707DE83C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +46,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DA0CF8EE-D680-4691-92B9-FD2A2A597299} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
+		{E1365FBE-527F-42D2-88A6-996BC2122FBF} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
+		{3B497276-48B9-4B3B-AB58-F4D03027E7B3} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
+		{79D97050-FD4A-4EAE-98D0-C603C43D70DC} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF60AFB2-ACFE-4C22-A4E4-30695A9B0C7B}

@@ -7,3 +7,10 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "1112:80"
+  database:
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    ports:
+      - "1113:3306"
+    volumes:
+      - .\mariadb_data:/my/own/datadir

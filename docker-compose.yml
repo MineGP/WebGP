@@ -9,6 +9,13 @@ services:
       dockerfile: WebGP/Dockerfile
     networks:
       - WebGP_Net
+    depends_on:
+      - database
+  database:
+    image: mariadb
+    container_name: MariaDB
+    networks:
+      - WebGP_Net
 networks:
   WebGP_Net:
     driver: bridge
