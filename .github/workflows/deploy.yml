@@ -39,6 +39,6 @@ jobs:
     - uses: actions/checkout@master
     - run: ls -a
     - name: Build image
-      run:  docker build -t $LOGIN/$NAME:${GITHUB_REF:11} -f Dockerfile ./WebGP/
+      run:  docker build -t $LOGIN/$NAME:${GITHUB_REF:11} -f ./WebGP/Dockerfile .
     - name: Push image to docker.io
       run: docker push $LOGIN/$NAME:${GITHUB_REF:11}
