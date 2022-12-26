@@ -12,7 +12,7 @@ services:
     depends_on:
       - database
   database:
-    image: mariadb
+    image: mariadb:10.6
     container_name: MariaDB
     networks:
       - WebGP_Net
