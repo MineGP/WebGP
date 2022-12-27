@@ -6,9 +6,9 @@ using Serilog;
 using WebGP.Application;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Infrastructure.DataBase;
-using WebGP.Interfaces;
+using WebGP.Interfaces.Config;
 using WebGP.Middlewares;
-using WebGP.Models;
+using WebGP.Models.Config;
 
 public class Program
 {
@@ -22,10 +22,11 @@ public class Program
                 Args = args
             });
 
-            IJwtConfig config = builder.Configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
-            string connetionString = builder.Configuration.GetConnectionString("self")!;
+            IJwtConfig jwtConfig = builder.Configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
+            IDBConfig dbCofig = builder.Configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!;
+            string connetionString = dbCofig.GetConnectionString();
 
-            builder.Services.AddSingleton(config);
+            builder.Services.AddSingleton(jwtConfig);
             builder.Services.AddScoped<ITimedRepository, TimedRepository>(v => new TimedRepository(connetionString));
             builder.Services.AddApplicationServices();
 
@@ -37,11 +38,11 @@ public class Program
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = config.Issuer,
+                        ValidIssuer = jwtConfig.Issuer,
                         ValidateAudience = true,
-                        ValidAudience = config.Audience,
+                        ValidAudience = jwtConfig.Audience,
                         ValidateLifetime = true,
-                        IssuerSigningKey = config.GetSecurityKey(),
+                        IssuerSigningKey = jwtConfig.GetSecurityKey(),
                         ValidateIssuerSigningKey = true,
                     };
                 });

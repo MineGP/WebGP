@@ -7,7 +7,8 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - DataBase__Self__User=${SELF_USER}
       - DataBase__Self__Password=${SELF_PASSWORD}
-      - DataBase__Self__DB=${SELF_DB}
+      - DataBase__Self__DataBase=${SELF_DB}
+      - DataBase__Self__Port=${SELF_PORT}
     ports:
       - "${API_OUT_PORT}:80"
   database:
