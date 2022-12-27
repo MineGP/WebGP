@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using WebGP.Application.Common.VM;
 using WebGP.Application.Data.Queries.GetTimedByID;
+using WebGP.Application.Data.Queries.GetTimedByUUID;
 
 namespace WebGP.Controllers
 {
-    [Route("timed")]
-    [ApiController]
+    [Route("timed"), ApiController]
     public class TimedController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -15,14 +15,14 @@ namespace WebGP.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        [Route("timed_id")]
-        public Task<IEnumerable<TimedVM>> GetByID([FromQuery(Name = "timed_id")] int timed_id)
-        {
-            return _mediator.Send(new GetTimedByIDQuery()
-            {
-                TimedID = timed_id
-            });
-        }
+        [HttpGet("id/{id?}")]
+        public Task<IDictionary<int, OnlineVM>> GetByID(
+            [FromRoute(Name = "id")] int? id = null)
+            => _mediator.Send(new GetTimedByIDQuery(id));
+
+        [HttpGet("uuid/{uuid?}")]
+        public Task<IDictionary<int, OnlineVM>> GetByUUID(
+            [FromRoute(Name = "uuid")] string? uuid = null)
+            => _mediator.Send(new GetTimedByUUIDQuery(uuid));
     }
 }
