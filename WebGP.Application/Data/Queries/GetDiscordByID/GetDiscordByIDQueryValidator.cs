@@ -12,7 +12,7 @@ namespace WebGP.Application.Data.Queries.GetDiscordByID
         public GetDiscordByIDQueryValidator()
         {
             RuleFor(v => v.DiscordID)
-                .Must(v => v is not int id || id >= 0);
+                .Must(v => v is not long id || id >= 0);
         }
     }
 }
