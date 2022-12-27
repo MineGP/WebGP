@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.1" />
     <PackageReference Include="MySql.Data" Version="8.0.31" />
   </ItemGroup>
 
@@ -15,5 +16,5 @@
     <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
     <ProjectReference Include="..\WebGP.Domain\WebGP.Domain.csproj" />
   </ItemGroup>
-
+  
 </Project>

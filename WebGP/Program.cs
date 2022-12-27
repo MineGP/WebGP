@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using WebGP.Application;
 using WebGP.Application.Common.Interfaces;
+using WebGP.Infrastructure;
 using WebGP.Infrastructure.DataBase;
 using WebGP.Interfaces.Config;
 using WebGP.Middlewares;
@@ -27,12 +28,9 @@ public class Program
             IDBConfig dbCofigSelf = builder.Configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!;
             IDBConfig dbCofigGP = builder.Configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!;
 
-            string connetionStringSelf = dbCofigSelf.GetConnectionString();
-            string connetionStringGP = dbCofigGP.GetConnectionString();
-
             builder.Services.AddSingleton(jwtConfig);
-            builder.Services.AddScoped<ITimedRepository, TimedRepository>(v => new TimedRepository(connetionStringSelf));
             builder.Services.AddApplicationServices();
+            builder.Services.AddInfrastructureServices(dbCofigSelf, dbCofigGP);
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddAuthorization();
