@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGP.Application.Common.VM;
 using WebGP.Application.Data.Queries.GetTimedByID;
@@ -17,6 +18,7 @@ namespace WebGP.Controllers
 
         [HttpGet]
         [Route("timed_id")]
+        [Authorize(Roles = "admin")]
         public Task<IEnumerable<TimedVM>> GetByID([FromQuery(Name = "timed_id")] int timed_id)
         {
             return _mediator.Send(new GetTimedByIDQuery()
