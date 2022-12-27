@@ -23,11 +23,15 @@ public class Program
             });
 
             IJwtConfig jwtConfig = builder.Configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
-            IDBConfig dbCofig = builder.Configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!;
-            string connetionString = dbCofig.GetConnectionString();
+
+            IDBConfig dbCofigSelf = builder.Configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!;
+            IDBConfig dbCofigGP = builder.Configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!;
+
+            string connetionStringSelf = dbCofigSelf.GetConnectionString();
+            string connetionStringGP = dbCofigGP.GetConnectionString();
 
             builder.Services.AddSingleton(jwtConfig);
-            builder.Services.AddScoped<ITimedRepository, TimedRepository>(v => new TimedRepository(connetionString));
+            builder.Services.AddScoped<ITimedRepository, TimedRepository>(v => new TimedRepository(connetionStringSelf));
             builder.Services.AddApplicationServices();
 
             builder.Services.AddControllersWithViews();
