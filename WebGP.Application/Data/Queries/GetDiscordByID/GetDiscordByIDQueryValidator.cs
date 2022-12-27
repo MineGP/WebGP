@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebGP.Application.Data.Queries.GetTimedByID
+namespace WebGP.Application.Data.Queries.GetDiscordByID
 {
-    public class GetTimedByIDQueryValidator : AbstractValidator<GetTimedByIDQuery>
+    public class GetDiscordByIDQueryValidator : AbstractValidator<GetDiscordByIDQuery>
     {
-        public GetTimedByIDQueryValidator()
+        public GetDiscordByIDQueryValidator()
         {
-            RuleFor(v => v.TimedID)
+            RuleFor(v => v.DiscordID)
                 .Must(v => v is not int id || id >= 0);
         }
     }

@@ -4,21 +4,19 @@ using WebGP.Application.Common.VM;
 
 namespace WebGP.Application.Data.Queries.GetTimedByID
 {
-    public class GetTimedByIDQuery : IRequest<IEnumerable<TimedVM>>
+    public record GetTimedByIDQuery(int? TimedID) : IRequest<IDictionary<int, OnlineVM>>;
+
+    public class GetTimedByIDQueryHandler : IRequestHandler<GetTimedByIDQuery, IDictionary<int, OnlineVM>>
     {
-        public int TimedID { get; set; }
-    }
-    public class GetTimedByIDQueryHandler : IRequestHandler<GetTimedByIDQuery, IEnumerable<TimedVM>>
-    {
-        private readonly ITimedRepository _timedRepository;
-        public GetTimedByIDQueryHandler(ITimedRepository timedRepository)
+        private readonly IOnlineRepository _onlineRepository;
+        public GetTimedByIDQueryHandler(IOnlineRepository onlineRepository)
         {
-            this._timedRepository = timedRepository;
+            this._onlineRepository = onlineRepository;
         }
 
-        public async Task<IEnumerable<TimedVM>> Handle(GetTimedByIDQuery request, CancellationToken cancellationToken)
-        {
-            return (await _timedRepository.GetTimedAsync()).Where(v => v.TimedID == request.TimedID);
-        }
+        public async Task<IDictionary<int, OnlineVM>> Handle(GetTimedByIDQuery request, CancellationToken cancellationToken)
+            => (await _onlineRepository.GetOnlineListAsync())
+                .Where(v => request.TimedID is not int id || v.TimedID == id)
+                .ToDictionary(v => v.TimedID, v => v);
     }
 }
