@@ -43,4 +43,4 @@ jobs:
     - name: Push image to docker.io
       run: docker push $LOGIN/$NAME:${GITHUB_REF:11}
     - name: Send webhook for deploy
-      run: "curl --silent --show-error --fail -X POST ${{ secrets.DEPLOYMENT_SERVER }} -H 'Authorization: ${{ secrets.DEPLOYMENT_TOKEN }}' -H 'Content-Type: application/json' -d '{\"owner\": \"${{ secrets.DOCKER_LOGIN }}\", \"repository\": \"${{ secrets.DOCKER_NAME }}\", \"tag\": \"${{ env.TAG }}\", \"ports\": {\"1112\": 80}}'"
+      run: "curl -X POST ${{ secrets.DEPLOYMENT_SERVER }} --header \"Authorization: ${{ secrets.DEPLOYMENT_TOKEN }}\""
