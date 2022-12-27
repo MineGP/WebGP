@@ -2,7 +2,7 @@
 
 namespace WebGP.Application.Common.VM
 {
-    public class TimedVM
+    public class OnlineVM
     {
         [JsonPropertyName("timed_id")] public int TimedID { get; set; }
         [JsonPropertyName("uuid")] public string UUID { get; set; } = null!;

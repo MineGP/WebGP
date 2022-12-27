@@ -2,8 +2,8 @@
 
 namespace WebGP.Application.Common.Interfaces
 {
-    public interface ITimedRepository
+    public interface IDiscordRepository
     {
-        Task<IEnumerable<TimedVM>> GetTimedAsync();
+        Task<IEnumerable<DiscordVM>> GetDiscordListAsync();
     }
 }

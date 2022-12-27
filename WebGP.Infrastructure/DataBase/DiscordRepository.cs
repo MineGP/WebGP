@@ -6,35 +6,30 @@ using WebGP.Application.Common.VM;
 
 namespace WebGP.Infrastructure.DataBase
 {
-    public class TimedRepository : ITimedRepository
+    public class DiscordRepository : IDiscordRepository
     {
         private readonly IDbConnection _connection;
         private const string SELECT_QUERY = @"
 SELECT
-	online.timed_id AS 'timed_id',
-	online.`uuid` AS 'uuid',
-	users.first_name AS 'first_name',
-	users.last_name AS 'last_name',
 	discord.discord_id AS 'discord_id',
+	GetLevel(users.exp) AS 'level',
 	r.name AS 'role',
 	w.name AS 'work',
-	GetLevel(IFNULL(users.exp,0)) AS 'level',
-    online.skin_url AS 'skin_url'
-FROM online
-LEFT JOIN users ON users.uuid = online.uuid
-LEFT JOIN discord ON discord.uuid = online.uuid
+    users.phone AS 'phone'
+FROM users
+INNER JOIN discord ON discord.uuid = users.uuid
 LEFT JOIN role_work_readonly r ON users.`work` = r.id AND r.`type` = 'WORK'
 LEFT JOIN role_work_readonly w ON users.`role` = w.id AND w.`type` = 'ROLE'
 ";
 
-        public TimedRepository(string connectionString)
+        public DiscordRepository(string connectionString)
         {
             _connection = new MySqlConnection(connectionString);
         }
 
-        public async Task<IEnumerable<TimedVM>> GetTimedAsync()
+        public Task<IEnumerable<DiscordVM>> GetDiscordListAsync()
         {
-            return await _connection.QueryAsync<TimedVM>(SELECT_QUERY);
+            return _connection.QueryAsync<DiscordVM>(SELECT_QUERY);
         }
     }
 }
