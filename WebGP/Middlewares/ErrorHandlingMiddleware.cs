@@ -19,7 +19,7 @@ namespace WebGP.Middlewares
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
             }
-            catch 
+            catch
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             }

@@ -1,13 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using WebGP.Application.Common.VM;
 using WebGP.Application.Data.Queries.GetOnline;
 using WebGP.Application.Data.Queries.GetOnlineLogByUserName;
 using WebGP.Application.Data.Queries.GetOnlineLogListByStaticID;
 using WebGP.Application.Data.Queries.GetOnlineLogListByUUID;
-using WebGP.Application.Data.Queries.GetTimedByID;
-using WebGP.Application.Data.Queries.GetTimedByUUID;
 
 namespace WebGP.Controllers
 {

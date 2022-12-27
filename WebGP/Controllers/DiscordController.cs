@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebGP.Application.Common.VM;
 using WebGP.Application.Data.Queries.GetDiscordByID;
-using WebGP.Application.Data.Queries.GetTimedByID;
-using WebGP.Application.Data.Queries.GetTimedByUUID;
 
 namespace WebGP.Controllers
 {

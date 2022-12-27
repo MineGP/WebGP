@@ -1,14 +1,4 @@
-﻿using FluentValidation;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using WebGP.Application.Common.Behaviours;
+﻿using Microsoft.Extensions.DependencyInjection;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Infrastructure.DataBase;
 using WebGP.Interfaces.Config;

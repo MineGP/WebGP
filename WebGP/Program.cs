@@ -1,12 +1,8 @@
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using WebGP.Application;
-using WebGP.Application.Common.Interfaces;
 using WebGP.Infrastructure;
-using WebGP.Infrastructure.DataBase;
 using WebGP.Interfaces.Config;
 using WebGP.Middlewares;
 using WebGP.Models.Config;

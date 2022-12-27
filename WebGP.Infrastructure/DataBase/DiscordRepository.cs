@@ -10,17 +10,16 @@ namespace WebGP.Infrastructure.DataBase
     {
         private readonly IDbConnection _connection;
         private const string SELECT_QUERY = @"
-SELECT
-	discord.discord_id AS 'discord_id',
-	GetLevel(users.exp) AS 'level',
-	r.name AS 'role',
-	w.name AS 'work',
-    users.phone AS 'phone'
-FROM users
-INNER JOIN discord ON discord.uuid = users.uuid
-LEFT JOIN role_work_readonly r ON users.`work` = r.id AND r.`type` = 'WORK'
-LEFT JOIN role_work_readonly w ON users.`role` = w.id AND w.`type` = 'ROLE'
-";
+            SELECT
+	            discord.discord_id AS 'discord_id',
+	            GetLevel(users.exp) AS 'level',
+	            r.name AS 'role',
+	            w.name AS 'work',
+                users.phone AS 'phone'
+            FROM users
+            INNER JOIN discord ON discord.uuid = users.uuid
+            LEFT JOIN role_work_readonly r ON users.`work` = r.id AND r.`type` = 'WORK'
+            LEFT JOIN role_work_readonly w ON users.`role` = w.id AND w.`type` = 'ROLE'";
 
         public DiscordRepository(string connectionString)
         {

@@ -1,13 +1,7 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.Mapper;
 using WebGP.Application.Common.VM;
-using WebGP.Application.Data.Queries.GetOnlineLogListByStaticID;
 
 namespace WebGP.Application.Data.Queries.GetOnlineLogListByUUID
 {

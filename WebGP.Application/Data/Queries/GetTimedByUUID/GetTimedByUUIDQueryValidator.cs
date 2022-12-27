@@ -1,10 +1,5 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace WebGP.Application.Data.Queries.GetTimedByUUID
 {
@@ -13,7 +8,7 @@ namespace WebGP.Application.Data.Queries.GetTimedByUUID
         public GetTimedByUUIDQueryValidator()
         {
             RuleFor(v => v.UUID)
-                .Must(v => v is not string uuid 
+                .Must(v => v is not string uuid
                     || UUID_REGEX().IsMatch(uuid));
         }
 

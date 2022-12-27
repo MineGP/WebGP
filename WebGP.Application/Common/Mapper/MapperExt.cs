@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebGP.Application.Common.VM;
+﻿using WebGP.Application.Common.VM;
 using WebGP.Domain.Entities;
 
 namespace WebGP.Application.Common.Mapper
