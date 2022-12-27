@@ -9,6 +9,9 @@ services:
       - DataBase__Self__Password=${SELF_PASSWORD}
       - DataBase__Self__DataBase=${SELF_DB}
       - DataBase__Self__Port=${SELF_PORT}
+      - JWT__Issuer=${JWT_ISSUER}
+      - JWT__Audience=${JWT_AUDIENCE}
+      - JWT__Key=${JWT_KEY}
     ports:
       - "${API_OUT_PORT}:80"
   database:
