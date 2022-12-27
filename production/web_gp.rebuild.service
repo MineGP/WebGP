@@ -1,0 +1,13 @@
+[Unit]
+Description=Deployment WebGP services
+After=network-online.target
+
+[Service]
+Type=simple
+RestartSec=3
+ExecStart=python3 /home/ubuntu/gp.www/AutoUpdater/rebuild.py
+Environment=CI_TOKEN=#CI_TOKEN#
+Environment=PATH_TO_SCRIPT=/home/ubuntu/gp.www/AutoUpdater/rebuild.sh
+
+[Install]
+WantedBy=multi-user.target

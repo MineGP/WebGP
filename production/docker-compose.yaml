@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  webgp:
+    image: codelime/web_gp:master
+    container_name: WebGP
+    networks:
+      - WebGP_Net
+    depends_on:
+      - database
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DataBase__Self__User=${SELF_USER}
+      - DataBase__Self__Password=${SELF_PASSWORD}
+      - DataBase__Self__DB=${SELF_DB}
+    ports:
+      - "1112:80"
+    restart: always
+  database:
+    image: mariadb:10.6
+    container_name: MariaDB
+    networks:
+      - WebGP_Net
+    platform: linux/x86_64
+    environment:
+      MARIADB_VERSION: "10.6"
+      MARIADB_ROOT_PASSWORD: ${SELF_PASSWORD}
+    ports:
+      - "1113:3306"
+    volumes:
+      - ./mariadb_data:/var/lib/mysql
+    restart: always
+
+networks:
+  WebGP_Net:
+    driver: bridge
