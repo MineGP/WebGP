@@ -1,14 +1,16 @@
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using WebGP.Application;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Infrastructure.DataBase;
-using WebGP.Interfaces;
+using WebGP.Interfaces.Config;
 using WebGP.Middlewares;
-using WebGP.Models;
+using WebGP.Models.Config;
 
 public class Program
 {
@@ -22,14 +24,20 @@ public class Program
                 Args = args
             });
 
-            IJwtConfig config = builder.Configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
-            string connetionString = builder.Configuration.GetConnectionString("self")!;
+            IJwtConfig jwtConfig = builder.Configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
 
-            builder.Services.AddSingleton(config);
-            builder.Services.AddScoped<ITimedRepository, TimedRepository>(v => new TimedRepository(connetionString));
+            IDBConfig dbCofigSelf = builder.Configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!;
+            IDBConfig dbCofigGP = builder.Configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!;
+
+            string connetionStringSelf = dbCofigSelf.GetConnectionString();
+            string connetionStringGP = dbCofigGP.GetConnectionString();
+
+            builder.Services.AddSingleton(jwtConfig);
+            builder.Services.AddScoped<ITimedRepository, TimedRepository>(v => new TimedRepository(connetionStringSelf));
             builder.Services.AddApplicationServices();
 
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -37,15 +45,41 @@ public class Program
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = config.Issuer,
+                        ValidIssuer = jwtConfig.Issuer,
                         ValidateAudience = true,
-                        ValidAudience = config.Audience,
+                        ValidAudience = jwtConfig.Audience,
                         ValidateLifetime = true,
-                        IssuerSigningKey = config.GetSecurityKey(),
+                        IssuerSigningKey = jwtConfig.GetSecurityKey(),
                         ValidateIssuerSigningKey = true,
                     };
                 });
-            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
 
             builder.Services.AddSingleton(Log.Logger);
             builder.Host.UseSerilog();
@@ -65,14 +99,35 @@ public class Program
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllers();
             if (app.Environment.IsDevelopment())
             {
-                app.UseEndpoints(v =>
+                app.Map("/", async _v => _v.Response.Redirect("swagger/index.html"));
+                app.Map("/CustomLogin", (string newIssuer, string newAudience) =>
                 {
-                    v.MapGet("/", async _v => _v.Response.Redirect("swagger/index.html"));
+                    var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
+                    var jwt = new JwtSecurityToken(
+                            issuer: newIssuer,
+                            audience: newAudience,
+                            expires: DateTime.MaxValue,
+                            claims: claims,
+                            signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+                    return new JwtSecurityTokenHandler().WriteToken(jwt);
+                });
+                app.Map("/DebugLogin", () =>
+                {
+                    var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
+                    var jwt = new JwtSecurityToken(
+                            issuer: jwtConfig.Issuer,
+                            audience: jwtConfig.Audience,
+                            expires: DateTime.UtcNow + TimeSpan.FromDays(360),
+                            claims: claims,
+                            signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+                    return new JwtSecurityTokenHandler().WriteToken(jwt);
                 });
             }
+            app.MapControllers();
             app.Run();
         }
         catch (Exception e)

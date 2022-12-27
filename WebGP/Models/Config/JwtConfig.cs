@@ -1,8 +1,8 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using WebGP.Interfaces;
+using WebGP.Interfaces.Config;
 
-namespace WebGP.Models
+namespace WebGP.Models.Config
 {
     public class JwtConfig : IJwtConfig
     {

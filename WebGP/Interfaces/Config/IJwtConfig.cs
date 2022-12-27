@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace WebGP.Interfaces
+namespace WebGP.Interfaces.Config
 {
     public interface IJwtConfig
     {
