@@ -59,115 +59,59 @@ namespace Domain.Tests.Helpers
         [Test]
         public void ParseHead_Top_ValidData_Parse()
         {
-            bool expr = true;
             head.ParseTop();
-            try
-            {
-                for(int i = 0; i < 8; i++)
-                {
-                    for(int j = 0; j < 8; j++)
-                    {
-                        if (head.Top[i, j] != topImage[i, j])
-                            expr = false;
-                    }
-                }
-            }
-            catch 
-            {
-                expr = false; 
-            }
-            Assert.That(expr, Is.True);
+
+            var res = head.Top;
+
+            Assert.That(AreEquals(ref res!, ref topImage));
         }
         [Test]
         public void ParseHead_Bot_ValidData_Parse()
         {
-            bool expr = true;
             head.ParseBot();
-            try
-            {
-                for (int i = 0; i < 8; i++)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if (head.Bot[i, j] != botImage[i, j])
-                            expr = false;
-                    }
-                }
-            }
-            catch
-            {
-                expr = false;
-            }
-            Assert.That(expr, Is.True);
+
+            var res = head.Bot;
+
+            Assert.That(AreEquals(ref res!, ref botImage));
         }
         [Test]
         public void ParseHead_Left_ValidData_Parse()
         {
-            bool expr = true;
             head.ParseLeft();
-            try
-            {
-                for (int i = 0; i < 8; i++)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if (head.Left[i, j] != leftImage[i, j])
-                            expr = false;
-                    }
-                }
-            }
-            catch
-            {
-                expr = false;
-            }
-            Assert.That(expr, Is.True);
+
+            var res = head.Left;
+
+            Assert.That(AreEquals(ref res!, ref leftImage));
         }
         [Test]
         public void ParseHead_Right_ValidData_Parse()
         {
-            bool expr = true;
             head.ParseRight();
-            try
-            {
-                for (int i = 0; i < 8; i++)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if (head.Right[i, j] != rightImage[i, j])
-                            expr = false;
-                    }
-                }
-            }
-            catch
-            {
-                expr = false;
-            }
-            Assert.That(expr, Is.True);
+
+            var res = head.Right;
+
+            Assert.That(AreEquals(ref res!, ref rightImage));
         }
         [Test]
         public void ParseHead_Front_ValidData_Parse()
         {
-            bool expr = true;
             head.ParseFront();
-            try
-            {
-                for (int i = 0; i < 8; i++)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if (head.Front[i, j] != frontImage[i, j])
-                            expr = false;
-                    }
-                }
-            }
-            catch
-            {
-                expr = false;
-            }
-            Assert.That(expr, Is.True);
+
+            var res = head.Front;
+
+            Assert.That(AreEquals(ref res!, ref frontImage));
         }
         [Test]
         public void ParseHead_Back_ValidData_Parse()
+        {
+            head.ParseBack();
+
+            var res = head.Back;
+
+            Assert.That(AreEquals(ref res!, ref backImage));
+        }
+
+        private bool AreEquals(ref Image<Rgba32> first, ref Image<Rgba32> second)
         {
             bool expr = true;
             head.ParseBack();
@@ -177,7 +121,7 @@ namespace Domain.Tests.Helpers
                 {
                     for (int j = 0; j < 8; j++)
                     {
-                        if (head.Back[i, j] != backImage[i, j])
+                        if (first[i, j] != second[i, j])
                             expr = false;
                     }
                 }
@@ -186,8 +130,7 @@ namespace Domain.Tests.Helpers
             {
                 expr = false;
             }
-            Assert.That(expr, Is.True);
+            return expr;
         }
-        
     }
 }
