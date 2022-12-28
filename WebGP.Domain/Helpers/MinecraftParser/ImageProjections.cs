@@ -24,6 +24,14 @@ namespace WebGP.Domain.Helpers.MinecraftParser
             Front = null;
             Back = null;
         }
+        public abstract void ParseAllBase();
+        public abstract void ParseTopBase();
+        public abstract void ParseBotBase();
+        public abstract void ParseLeftBase();
+        public abstract void ParseRightBase();
+        public abstract void ParseFrontBase();
+        public abstract void ParseBackBase();
+
         public abstract void ParseAll();
         public abstract void ParseTop();
         public abstract void ParseBot();
@@ -32,5 +40,15 @@ namespace WebGP.Domain.Helpers.MinecraftParser
         public abstract void ParseFront();
         public abstract void ParseBack();
 
+        protected void parseHeadBaseProjection(ref Image<Rgba32> part, int dx, int dy, int width, int height)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    part[i, j] = _image[i + dx, j + dy];
+                }
+            }
+        }
     }
 }

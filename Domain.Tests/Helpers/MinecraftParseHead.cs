@@ -57,54 +57,54 @@ namespace Domain.Tests.Helpers
         }
         
         [Test]
-        public void ParseHead_Top_ValidData_Parse()
+        public void ParseHead_Base_Top_ValidData_Parse()
         {
-            head.ParseTop();
+            head.ParseTopBase();
 
             var res = head.Top;
 
             Assert.That(AreEquals(ref res!, ref topImage));
         }
         [Test]
-        public void ParseHead_Bot_ValidData_Parse()
+        public void ParseHead_Base_Bot_ValidData_Parse()
         {
-            head.ParseBot();
+            head.ParseBotBase();
 
             var res = head.Bot;
 
             Assert.That(AreEquals(ref res!, ref botImage));
         }
         [Test]
-        public void ParseHead_Left_ValidData_Parse()
+        public void ParseHead_Base_Left_ValidData_Parse()
         {
-            head.ParseLeft();
+            head.ParseLeftBase();
 
             var res = head.Left;
 
             Assert.That(AreEquals(ref res!, ref leftImage));
         }
         [Test]
-        public void ParseHead_Right_ValidData_Parse()
+        public void ParseHead_Base_Right_ValidData_Parse()
         {
-            head.ParseRight();
+            head.ParseRightBase();
 
             var res = head.Right;
 
             Assert.That(AreEquals(ref res!, ref rightImage));
         }
         [Test]
-        public void ParseHead_Front_ValidData_Parse()
+        public void ParseHead_Base_Front_ValidData_Parse()
         {
-            head.ParseFront();
+            head.ParseFrontBase();
 
             var res = head.Front;
 
             Assert.That(AreEquals(ref res!, ref frontImage));
         }
         [Test]
-        public void ParseHead_Back_ValidData_Parse()
+        public void ParseHead_Base_Back_ValidData_Parse()
         {
-            head.ParseBack();
+            head.ParseBackBase();
 
             var res = head.Back;
 
@@ -113,8 +113,7 @@ namespace Domain.Tests.Helpers
 
         private bool AreEquals(ref Image<Rgba32> first, ref Image<Rgba32> second)
         {
-            bool expr = true;
-            head.ParseBack();
+            bool expr = true;   
             try
             {
                 for (int i = 0; i < 8; i++)

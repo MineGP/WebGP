@@ -3,12 +3,11 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace WebGP.Domain.Helpers.MinecraftParser.Models
 {
-    public class Head : ImageProjections
+    public class Body : ImageProjections
     {
-        private const int SIDE_SIZE = 8;
 
-        public Head(Image<Rgba32> image)
-            : base (image)
+        public Body(Image<Rgba32> image) 
+            : base(image)
         {
         }
 
@@ -19,12 +18,7 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseAllBase()
         {
-            ParseBack();
-            ParseFront();
-            ParseLeft();
-            ParseRight();
-            ParseTop();
-            ParseBot();
+            throw new NotImplementedException();
         }
 
         public override void ParseBack()
@@ -34,9 +28,7 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseBackBase()
         {
-            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
-            parseHeadBaseProjection(ref tmp, SIDE_SIZE * 3, SIDE_SIZE, SIDE_SIZE, SIDE_SIZE);
-            Back = tmp;
+            throw new NotImplementedException();
         }
 
         public override void ParseBot()
@@ -46,9 +38,7 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseBotBase()
         {
-            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
-            parseHeadBaseProjection(ref tmp, SIDE_SIZE * 2, 0, SIDE_SIZE, SIDE_SIZE);
-            Bot = tmp;
+            throw new NotImplementedException();
         }
 
         public override void ParseFront()
@@ -58,9 +48,7 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseFrontBase()
         {
-            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
-            parseHeadBaseProjection(ref tmp, SIDE_SIZE, SIDE_SIZE, SIDE_SIZE, SIDE_SIZE);
-            Front = tmp;
+            throw new NotImplementedException();
         }
 
         public override void ParseLeft()
@@ -70,9 +58,7 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseLeftBase()
         {
-            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
-            parseHeadBaseProjection(ref tmp, SIDE_SIZE * 2, SIDE_SIZE, SIDE_SIZE, SIDE_SIZE);
-            Left = tmp;
+            throw new NotImplementedException();
         }
 
         public override void ParseRight()
@@ -82,9 +68,7 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseRightBase()
         {
-            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
-            parseHeadBaseProjection(ref tmp, 0, SIDE_SIZE, SIDE_SIZE, SIDE_SIZE);
-            Right = tmp;
+            throw new NotImplementedException();
         }
 
         public override void ParseTop()
@@ -94,9 +78,7 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseTopBase()
         {
-            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
-            parseHeadBaseProjection(ref tmp, SIDE_SIZE, 0, SIDE_SIZE, SIDE_SIZE);
-            Top = tmp;
+            throw new NotImplementedException();
         }
     }
 }
