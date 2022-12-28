@@ -1,6 +1,5 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using static WebGP.Domain.Helpers.MinecraftParser.MinecraftImageParser;
 using WebGP.Domain.Helpers.MinecraftParser.Models;
 namespace Domain.Tests.Helpers
 {

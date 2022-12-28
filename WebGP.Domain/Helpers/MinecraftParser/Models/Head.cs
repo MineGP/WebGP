@@ -1,11 +1,5 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace WebGP.Domain.Helpers.MinecraftParser.Models
 {
@@ -34,35 +28,30 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
             parseHeadProjection(ref tmp, SIDE_SIZE * 3, SIDE_SIZE);
             Back = tmp;
         }
-
         public override void ParseBot()
         {
             var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
             parseHeadProjection(ref tmp, SIDE_SIZE * 2, 0);
             Bot = tmp;
         }
-
         public override void ParseFront()
         {
             var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
             parseHeadProjection(ref tmp, SIDE_SIZE, SIDE_SIZE);
             Front = tmp;
         }
-
         public override void ParseLeft()
         {
             var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
             parseHeadProjection(ref tmp, SIDE_SIZE * 2, SIDE_SIZE);
             Left = tmp;
         }
-
         public override void ParseRight()
         {
             var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
             parseHeadProjection(ref tmp, 0, SIDE_SIZE);
             Right = tmp;
         }
-
         public override void ParseTop()
         {
             var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
