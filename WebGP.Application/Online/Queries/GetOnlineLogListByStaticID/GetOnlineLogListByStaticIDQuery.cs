@@ -3,7 +3,7 @@ using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.Mapper;
 using WebGP.Application.Common.VM;
 
-namespace WebGP.Application.Data.Queries.GetOnlineLogListByStaticID
+namespace WebGP.Application.Online.Queries.GetOnlineLogListByStaticID
 {
     public record GetOnlineLogListByStaticIDQuery(uint StaticID, DateTime From, DateTime To) : IRequest<IEnumerable<OnlineLogVM>>;
     public class GetOnlineLogListByStaticIDQueryHandler : IRequestHandler<GetOnlineLogListByStaticIDQuery, IEnumerable<OnlineLogVM>>
@@ -11,7 +11,7 @@ namespace WebGP.Application.Data.Queries.GetOnlineLogListByStaticID
         private readonly IOnlineRepository _onlineRepository;
         public GetOnlineLogListByStaticIDQueryHandler(IOnlineRepository onlineRepository)
         {
-            this._onlineRepository = onlineRepository;
+            _onlineRepository = onlineRepository;
         }
 
         public async Task<IEnumerable<OnlineLogVM>> Handle(GetOnlineLogListByStaticIDQuery request, CancellationToken cancellationToken)

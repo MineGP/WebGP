@@ -3,7 +3,7 @@ using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.Mapper;
 using WebGP.Application.Common.VM;
 
-namespace WebGP.Application.Data.Queries.GetOnlineLogListByUUID
+namespace WebGP.Application.Online.Queries.GetOnlineLogListByUUID
 {
     public record GetOnlineLogListByUUIDQuery(string UUID, DateTime From, DateTime To) : IRequest<IEnumerable<OnlineLogVM>>;
     public class GetOnlineLogListByUUIDQueryHandler : IRequestHandler<GetOnlineLogListByUUIDQuery, IEnumerable<OnlineLogVM>>
@@ -11,7 +11,7 @@ namespace WebGP.Application.Data.Queries.GetOnlineLogListByUUID
         private readonly IOnlineRepository _onlineRepository;
         public GetOnlineLogListByUUIDQueryHandler(IOnlineRepository onlineRepository)
         {
-            this._onlineRepository = onlineRepository;
+            _onlineRepository = onlineRepository;
         }
 
         public async Task<IEnumerable<OnlineLogVM>> Handle(GetOnlineLogListByUUIDQuery request, CancellationToken cancellationToken)

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using WebGP.Application.Common.Interfaces;
 
-namespace WebGP.Application.Data.Queries.GetOnline
+namespace WebGP.Application.Online.Queries.GetOnline
 {
     public record GetOnlineQuery() : IRequest<int>;
     public class GetOnlineQueryHandler : IRequestHandler<GetOnlineQuery, int>
@@ -9,7 +9,7 @@ namespace WebGP.Application.Data.Queries.GetOnline
         private readonly IOnlineRepository _onlineRepository;
         public GetOnlineQueryHandler(IOnlineRepository onlineRepository)
         {
-            this._onlineRepository = onlineRepository;
+            _onlineRepository = onlineRepository;
         }
 
         public Task<int> Handle(GetOnlineQuery request, CancellationToken cancellationToken)
