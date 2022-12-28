@@ -5,49 +5,80 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WebGP.Domain.Helpers.MinecraftParser.Models
 {
     public class Head : ImageProjections
     {
-        public override void ParseAll(Image<Rgba32> image)
+        private const int SIDE_SIZE = 8;
+
+        public Head(Image<Rgba32> image)
+            : base (image)
         {
-            ParseBack(image);
-            ParseFront(image);
-            ParseLeft(image);
-            ParseRight(image);
-            ParseTop(image);
-            ParseBot(image);
         }
 
-        public override void ParseBack(Image<Rgba32> image)
+        public override void ParseAll()
         {
-            throw new NotImplementedException();
+            ParseBack();
+            ParseFront();
+            ParseLeft();
+            ParseRight();
+            ParseTop();
+            ParseBot();
         }
 
-        public override void ParseBot(Image<Rgba32> image)
+        public override void ParseBack()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
+            parseHeadProjection(ref tmp, SIDE_SIZE * 3, SIDE_SIZE);
+            Back = tmp;
         }
 
-        public override void ParseFront(Image<Rgba32> image)
+        public override void ParseBot()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
+            parseHeadProjection(ref tmp, SIDE_SIZE * 2, 0);
+            Bot = tmp;
         }
 
-        public override void ParseLeft(Image<Rgba32> image)
+        public override void ParseFront()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
+            parseHeadProjection(ref tmp, SIDE_SIZE, SIDE_SIZE);
+            Front = tmp;
         }
 
-        public override void ParseRight(Image<Rgba32> image)
+        public override void ParseLeft()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
+            parseHeadProjection(ref tmp, SIDE_SIZE * 2, SIDE_SIZE);
+            Left = tmp;
         }
 
-        public override void ParseTop(Image<Rgba32> image)
+        public override void ParseRight()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
+            parseHeadProjection(ref tmp, 0, SIDE_SIZE);
+            Right = tmp;
+        }
+
+        public override void ParseTop()
+        {
+            var tmp = new Image<Rgba32>(SIDE_SIZE, SIDE_SIZE);
+            parseHeadProjection(ref tmp, SIDE_SIZE, 0);
+            Top = tmp;
+        }
+
+        private void parseHeadProjection(ref Image<Rgba32> part, int dx, int dy)
+        {
+            for (int i = 0; i < SIDE_SIZE; i++)
+            {
+                for (int j = 0; j < SIDE_SIZE; j++)
+                {
+                    part[i, j] = _image[i + dx, j + dy];
+                }
+            }
         }
     }
 }

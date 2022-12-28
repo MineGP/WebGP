@@ -7,6 +7,8 @@ namespace Domain.Tests.Helpers
     public class MinecraftParseHead
     {
         private Image<Rgba32> img;
+        private Head head;
+
         private Image<Rgba32> topImage;
         private Image<Rgba32> botImage;
         private Image<Rgba32> leftImage;
@@ -44,6 +46,9 @@ namespace Domain.Tests.Helpers
 
 
             img = Image.Load<Rgba32>(imgBytes);
+
+            head = new Head(img);
+
             topImage = Image.Load<Rgba32>(topBytes);
             botImage = Image.Load<Rgba32>(botBytes);
             leftImage = Image.Load<Rgba32>(leftBytes);
@@ -56,8 +61,7 @@ namespace Domain.Tests.Helpers
         public void ParseHead_Top_ValidData_Parse()
         {
             bool expr = true;
-            var head = new Head();
-            head.ParseTop(img);
+            head.ParseTop();
             try
             {
                 for(int i = 0; i < 8; i++)
@@ -79,8 +83,7 @@ namespace Domain.Tests.Helpers
         public void ParseHead_Bot_ValidData_Parse()
         {
             bool expr = true;
-            var head = new Head();
-            head.ParseBot(img);
+            head.ParseBot();
             try
             {
                 for (int i = 0; i < 8; i++)
@@ -102,8 +105,7 @@ namespace Domain.Tests.Helpers
         public void ParseHead_Left_ValidData_Parse()
         {
             bool expr = true;
-            var head = new Head();
-            head.ParseLeft(img);
+            head.ParseLeft();
             try
             {
                 for (int i = 0; i < 8; i++)
@@ -125,8 +127,7 @@ namespace Domain.Tests.Helpers
         public void ParseHead_Right_ValidData_Parse()
         {
             bool expr = true;
-            var head = new Head();
-            head.ParseRight(img);
+            head.ParseRight();
             try
             {
                 for (int i = 0; i < 8; i++)
@@ -148,8 +149,7 @@ namespace Domain.Tests.Helpers
         public void ParseHead_Front_ValidData_Parse()
         {
             bool expr = true;
-            var head = new Head();
-            head.ParseFront(img);
+            head.ParseFront();
             try
             {
                 for (int i = 0; i < 8; i++)
@@ -171,8 +171,7 @@ namespace Domain.Tests.Helpers
         public void ParseHead_Back_ValidData_Parse()
         {
             bool expr = true;
-            var head = new Head();
-            head.ParseBack(img);
+            head.ParseBack();
             try
             {
                 for (int i = 0; i < 8; i++)
