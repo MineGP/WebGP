@@ -3,7 +3,7 @@ using WebGP.Domain.Entities;
 
 namespace WebGP.Application.Common.Mapper
 {
-    public static partial class MapperExt
+    public static partial class ExtensionMappers
     {
         public static OnlineLogVM MapToVM(this OnlineLog value) => new OnlineLogVM()
         {
