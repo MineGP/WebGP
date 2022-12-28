@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="data\" />
+    <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
   </ItemGroup>
 
 </Project>
