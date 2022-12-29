@@ -5,6 +5,9 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 {
     public class Body : ImageProjections
     {
+        private const int HEIGHT = 12;
+        private const int WIDTH = 4;
+        private const int LENGHT = 8;
 
         public Body(Image<Rgba32> image) 
             : base(image)
@@ -28,7 +31,9 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseBackBase()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(LENGHT, HEIGHT);
+            parseHeadBaseProjection(ref tmp, 32, 20, LENGHT, HEIGHT);
+            Back = tmp;
         }
 
         public override void ParseBot()
@@ -38,7 +43,9 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseBotBase()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(LENGHT, WIDTH);
+            parseHeadBaseProjection(ref tmp, 28, 16, LENGHT, WIDTH);
+            Bot = tmp;
         }
 
         public override void ParseFront()
@@ -48,7 +55,9 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseFrontBase()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(LENGHT, HEIGHT);
+            parseHeadBaseProjection(ref tmp, 20, 20, LENGHT, HEIGHT);
+            Front = tmp;
         }
 
         public override void ParseLeft()
@@ -58,7 +67,9 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseLeftBase()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(WIDTH, HEIGHT);
+            parseHeadBaseProjection(ref tmp, 28, 20, WIDTH, HEIGHT);
+            Left = tmp;
         }
 
         public override void ParseRight()
@@ -68,7 +79,9 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseRightBase()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(WIDTH, HEIGHT);
+            parseHeadBaseProjection(ref tmp, 16, 20, WIDTH, HEIGHT);
+            Right = tmp;
         }
 
         public override void ParseTop()
@@ -78,7 +91,9 @@ namespace WebGP.Domain.Helpers.MinecraftParser.Models
 
         public override void ParseTopBase()
         {
-            throw new NotImplementedException();
+            var tmp = new Image<Rgba32>(LENGHT, WIDTH);
+            parseHeadBaseProjection(ref tmp, 20, 16, LENGHT, WIDTH);
+            Top = tmp;
         }
     }
 }
