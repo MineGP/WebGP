@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebGP.Models.DataBase.Self;
 
-namespace WebGP.Interfaces.DataBase.Self;
-
-public interface ISqlContext
+namespace WebGP.Interfaces.DataBase.Self
 {
-    DbSet<ClientAPI> Clients { get; }
+    public interface ISqlContext
+    {
+        DbSet<ClientAPI> Clients { get; }
+    }
 }

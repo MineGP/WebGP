@@ -1,6 +1,13 @@
-﻿namespace WebGP.Application.Common.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public interface IRpGenerator
+namespace WebGP.Application.Common.Interfaces
 {
-    Task<string> GenerateAsync(Uri url, IEnumerable<string> executable);
+    public interface IRpGenerator
+    {
+        Task<string> GenerateAsync(Uri url, IEnumerable<string> executable);
+    }
 }

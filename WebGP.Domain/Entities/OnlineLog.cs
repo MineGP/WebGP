@@ -1,6 +1,9 @@
-﻿namespace WebGP.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public class OnlineLog
+namespace WebGP.Domain.Entities;
+
+public partial class OnlineLog
 {
     public int Id { get; set; }
 

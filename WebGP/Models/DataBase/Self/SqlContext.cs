@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebGP.Interfaces.DataBase.Self;
 
-namespace WebGP.Models.DataBase.Self;
-
-public class SqlContext : DbContext, ISqlContext
+namespace WebGP.Models.DataBase.Self
 {
-    public SqlContext(DbContextOptions<SqlContext> options) : base(options)
+    public class SqlContext : DbContext, ISqlContext
     {
-        Database.EnsureCreated();
-    }
+        public DbSet<ClientAPI> Clients { get; set; } = null!;
 
-    public DbSet<ClientAPI> Clients { get; set; } = null!;
+        public SqlContext(DbContextOptions<SqlContext> options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
+    }
 }

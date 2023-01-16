@@ -1,6 +1,7 @@
-﻿namespace WebGP.Models;
-
-public static class Roles
+﻿namespace WebGP.Models
 {
-    public const string Admin = "Admin";
+    public static class Roles
+    {
+        public const string Admin = "Admin";
+    }
 }

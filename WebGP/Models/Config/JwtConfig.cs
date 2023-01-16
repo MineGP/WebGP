@@ -1,18 +1,16 @@
-﻿using System.Text;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using WebGP.Interfaces.Config;
 
-namespace WebGP.Models.Config;
-
-public class JwtConfig : IJwtConfig
+namespace WebGP.Models.Config
 {
-    public string Issuer { get; set; } = null!;
-    public string Audience { get; set; } = null!;
-    public string Key { get; set; } = null!;
-    public TimeSpan Expires { get; set; }
-
-    public SymmetricSecurityKey GetSecurityKey()
+    public class JwtConfig : IJwtConfig
     {
-        return new(Encoding.UTF8.GetBytes(Key));
+        public string Issuer { get; set; } = null!;
+        public string Audience { get; set; } = null!;
+        public string Key { get; set; } = null!;
+        public TimeSpan Expires { get; set; }
+
+        public SymmetricSecurityKey GetSecurityKey() => new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
     }
 }

@@ -1,6 +1,9 @@
-﻿namespace WebGP.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public class Discord
+namespace WebGP.Domain.Entities;
+
+public partial class Discord
 {
     public long DiscordId { get; set; }
 
