@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace WebGP.Domain.Entities;
 
-namespace WebGP.Domain.Entities;
-
-public partial class RoleWorkReadonly
+public class RoleWorkReadonly
 {
     public int Id { get; set; }
 

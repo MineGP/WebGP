@@ -1,12 +1,11 @@
-﻿namespace WebGP.Interfaces.Config
-{
-    public interface IDBConfig
-    {
-        string User { get; }
-        string Password { get; }
-        string DataBase { get; }
-        uint Port { get; }
+﻿namespace WebGP.Interfaces.Config;
 
-        string GetConnectionString();
-    }
+public interface IDBConfig
+{
+    string User { get; }
+    string Password { get; }
+    string DataBase { get; }
+    uint Port { get; }
+
+    string GetConnectionString();
 }

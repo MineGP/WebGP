@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Domain.Entities;
 
@@ -8,8 +6,13 @@ namespace WebGP.Infrastructure.DataBase;
 
 public partial class ApplicationDbContext : DbContext, IContext
 {
-    public ApplicationDbContext() {}
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public ApplicationDbContext()
+    {
+    }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+    }
 
     public virtual DbSet<Discord> Discords { get; set; }
     public virtual DbSet<Online> Onlines { get; set; }

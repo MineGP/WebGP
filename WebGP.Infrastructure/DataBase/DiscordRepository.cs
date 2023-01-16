@@ -1,15 +1,14 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using MySql.Data.MySqlClient;
-using System.Data;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.VM;
 
-namespace WebGP.Infrastructure.DataBase
+namespace WebGP.Infrastructure.DataBase;
+
+public class DiscordRepository : IDiscordRepository
 {
-    public class DiscordRepository : IDiscordRepository
-    {
-        private readonly IDbConnection _connection;
-        private const string SELECT_QUERY = @"
+    private const string SELECT_QUERY = @"
             SELECT
 	            discord.discord_id AS 'discord_id',
 	            GetLevel(users.exp) AS 'level',
@@ -21,14 +20,15 @@ namespace WebGP.Infrastructure.DataBase
             LEFT JOIN role_work_readonly r ON users.`work` = r.id AND r.`type` = 'WORK'
             LEFT JOIN role_work_readonly w ON users.`role` = w.id AND w.`type` = 'ROLE'";
 
-        public DiscordRepository(string connectionString)
-        {
-            _connection = new MySqlConnection(connectionString);
-        }
+    private readonly IDbConnection _connection;
 
-        public Task<IEnumerable<DiscordVM>> GetDiscordListAsync()
-        {
-            return _connection.QueryAsync<DiscordVM>(SELECT_QUERY);
-        }
+    public DiscordRepository(string connectionString)
+    {
+        _connection = new MySqlConnection(connectionString);
+    }
+
+    public Task<IEnumerable<DiscordVM>> GetDiscordListAsync()
+    {
+        return _connection.QueryAsync<DiscordVM>(SELECT_QUERY);
     }
 }
