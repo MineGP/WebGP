@@ -31,7 +31,7 @@ public class OnlineLogController : ControllerBase
         => _mediator.Send(new GetOnlineLogByUUIDQuery(uuid, from, to));
 
     [HttpGet("user_name/{user_name?}")]
-    public Task<IEnumerable<OnlineLogVM>> GetByUserName(
+    public Task<IDictionary<string, OnlineLogVM>> GetByUserName(
         [FromRoute(Name = "user_name")] string? userName,
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to)

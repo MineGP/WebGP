@@ -11,12 +11,12 @@ public interface IGetOnlineLogByQuery
     DateOnly To { get; }
 }
 
-public record GetOnlineLogByUserNameQuery(string UserName, DateOnly From, DateOnly To) : IRequest<IEnumerable<OnlineLogVM>>, IGetOnlineLogByQuery;
+public record GetOnlineLogByUserNameQuery(string? UserName, DateOnly From, DateOnly To) : IRequest<IDictionary<string, OnlineLogVM>>, IGetOnlineLogByQuery;
 public record GetOnlineLogByStaticIDQuery(int? StaticID, DateOnly From, DateOnly To) : IRequest<IDictionary<int, OnlineLogVM>>, IGetOnlineLogByQuery;
 public record GetOnlineLogByUUIDQuery(string? UUID, DateOnly From, DateOnly To) : IRequest<IDictionary<string, OnlineLogVM>>, IGetOnlineLogByQuery;
 
 public class GetOnlineLogByQueryHandler :
-    IRequestHandler<GetOnlineLogByUserNameQuery, IEnumerable<OnlineLogVM>>,
+    IRequestHandler<GetOnlineLogByUserNameQuery, IDictionary<string, OnlineLogVM>>,
     IRequestHandler<GetOnlineLogByStaticIDQuery, IDictionary<int, OnlineLogVM>>,
     IRequestHandler<GetOnlineLogByUUIDQuery, IDictionary<string, OnlineLogVM>>
 {
@@ -38,17 +38,16 @@ public class GetOnlineLogByQueryHandler :
                 Seconds = v.Log.Sec
             }, cancellationToken: cancellationToken);
 
-    public async Task<IEnumerable<OnlineLogVM>> Handle(GetOnlineLogByUserNameQuery request,
+    public async Task<IDictionary<string, OnlineLogVM>> Handle(GetOnlineLogByUserNameQuery request,
         CancellationToken cancellationToken)
         => await GetBy(request)
-            .Where(v => v.User.UserName == request.UserName)
-            .Select(v => new OnlineLogVM
+            .Where(request.UserName is string userName ? v => v.User.UserName == userName : v => true)
+            .ToAsyncEnumerable()
+            .ToDictionaryAsync(v => v.User.UserName, v => new OnlineLogVM
             {
                 Day = v.Log.Day.ToString("yyyy-MM-dd"),
                 Seconds = v.Log.Sec
-            })
-            .ToAsyncEnumerable()
-            .ToListAsync(cancellationToken);
+            }, cancellationToken: cancellationToken);
 
     public async Task<IDictionary<string, OnlineLogVM>> Handle(GetOnlineLogByUUIDQuery request,
         CancellationToken cancellationToken)
