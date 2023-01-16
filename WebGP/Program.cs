@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using WebGP.Application;
 using WebGP.Infrastructure;
 using WebGP.Interfaces.Config;
@@ -94,15 +95,18 @@ public class Program
             if (app.Environment.IsDevelopment())
             {
                 app.Map("/", async _v => _v.Response.Redirect("swagger/index.html"));
-                app.Map("/CustomLogin", (string newIssuer, string newAudience) =>
+                app.Map("/CustomLogin", (string issuer, string audience, string key) =>
                 {
                     var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
                     var jwt = new JwtSecurityToken(
-                            issuer: newIssuer,
-                            audience: newAudience,
+                            issuer: issuer,
+                            audience: audience,
                             expires: DateTime.MaxValue,
                             claims: claims,
-                            signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(), SecurityAlgorithms.HmacSha256));
+                            signingCredentials: 
+                                new SigningCredentials(
+                                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), 
+                                    SecurityAlgorithms.HmacSha256));
 
                     return new JwtSecurityTokenHandler().WriteToken(jwt);
                 });
