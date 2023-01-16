@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using WebGP.Application;
 using WebGP.Infrastructure;
 using WebGP.Interfaces.Config;
@@ -26,6 +29,7 @@ public class Program
             builder.Services.AddInfrastructureServices(builder.Configuration);
 
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -41,7 +45,33 @@ public class Program
                         ValidateIssuerSigningKey = true,
                     };
                 });
-            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
 
             builder.Services.AddSingleton(Log.Logger);
             builder.Host.UseSerilog();
@@ -61,13 +91,35 @@ public class Program
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllers();
             if (app.Environment.IsDevelopment())
             {
-#pragma warning disable CS1998 // В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод
-                app.MapGet("/", async _v => _v.Response.Redirect("swagger/index.html"));
-#pragma warning restore CS1998 // В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод
+                app.Map("/", async _v => _v.Response.Redirect("swagger/index.html"));
+                app.Map("/CustomLogin", (string newIssuer, string newAudience) =>
+                {
+                    var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
+                    var jwt = new JwtSecurityToken(
+                            issuer: newIssuer,
+                            audience: newAudience,
+                            expires: DateTime.MaxValue,
+                            claims: claims,
+                            signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+                    return new JwtSecurityTokenHandler().WriteToken(jwt);
+                });
+                app.Map("/DebugLogin", () =>
+                {
+                    var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
+                    var jwt = new JwtSecurityToken(
+                            issuer: jwtConfig.Issuer,
+                            audience: jwtConfig.Audience,
+                            expires: DateTime.UtcNow + TimeSpan.FromDays(360),
+                            claims: claims,
+                            signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+                    return new JwtSecurityTokenHandler().WriteToken(jwt);
+                });
             }
+            app.MapControllers();
             app.Run();
         }
         catch (Exception e)
