@@ -76,7 +76,7 @@ public class Program
         }
         catch (Exception e)
         {
-            Log.Fatal(e, "Application terminater unexpectedly");
+            Log.Fatal(e, "Application terminated unexpectedly");
         }
         finally
         {
