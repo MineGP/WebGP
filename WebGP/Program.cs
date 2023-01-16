@@ -95,7 +95,7 @@ public class Program
             if (app.Environment.IsDevelopment())
             {
                 app.Map("/", async _v => _v.Response.Redirect("swagger/index.html"));
-                app.Map("/CustomLogin", (string issuer, string audience, string key) =>
+                app.Map("/custom_login", (string issuer, string audience, string key) =>
                 {
                     var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
                     var jwt = new JwtSecurityToken(
@@ -110,7 +110,7 @@ public class Program
 
                     return new JwtSecurityTokenHandler().WriteToken(jwt);
                 });
-                app.Map("/DebugLogin", () =>
+                app.Map("/debug_login", () =>
                 {
                     var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
                     var jwt = new JwtSecurityToken(
