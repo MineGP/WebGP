@@ -9,11 +9,13 @@ services:
       - DataBase__Self__User=${SELF_USER}
       - DataBase__Self__Password=${SELF_PASSWORD}
       - DataBase__Self__DataBase=${SELF_DB}
+      - DataBase__Self__Server=${SELF_SERVER}
       - DataBase__Self__Port=${SELF_PORT}
 
       - DataBase__GP__User=${GP_USER}
       - DataBase__GP__Password=${GP_PASSWORD}
       - DataBase__GP__DataBase=${GP_DB}
+      - DataBase__GP__Server=${GP_SERVER}
       - DataBase__GP__Port=${GP_PORT}
 
       - JWT__Issuer=${JWT_ISSUER}
