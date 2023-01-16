@@ -1,9 +1,20 @@
-﻿namespace WebGP.Infrastructure.DataBase.Entities
+﻿namespace WebGP.Domain.Entities;
+
+public class Online
 {
-    public class Online
-    {
-        public int ID { get; set; }
-        public string UUID { get; set; }
-        public string SkinURL { get; set; }
-    }
+    public string Uuid { get; set; } = null!;
+
+    public double X { get; set; }
+
+    public double Y { get; set; }
+
+    public double Z { get; set; }
+
+    public int World { get; set; }
+
+    public int? TimedId { get; set; }
+
+    public bool IsOp { get; set; }
+
+    public string? SkinUrl { get; set; }
 }

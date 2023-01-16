@@ -1,40 +1,40 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>6e7f14f2-61a9-4611-94ad-935554790f83</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>6e7f14f2-61a9-4611-94ad-935554790f83</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MediatR" Version="11.1.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
-    <PackageReference Include="Serilog" Version="2.12.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="SSH.NET" Version="2020.0.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.4.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="11.1.0"/>
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2"/>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2"/>
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1"/>
+        <PackageReference Include="Serilog" Version="2.12.0"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0"/>
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0"/>
+        <PackageReference Include="SSH.NET" Version="2020.0.2"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\DataBase\Minecraft\" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Models\DataBase\Minecraft\"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
-    <ProjectReference Include="..\WebGP.Domain\WebGP.Domain.csproj" />
-    <ProjectReference Include="..\WebGP.Infrastructure\WebGP.Infrastructure.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj"/>
+        <ProjectReference Include="..\WebGP.Domain\WebGP.Domain.csproj"/>
+        <ProjectReference Include="..\WebGP.Infrastructure\WebGP.Infrastructure.csproj"/>
+    </ItemGroup>
 
 </Project>
