@@ -32,21 +32,20 @@ public class Program
             var app = builder.Build();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
 
-            //app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+                //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.Map("/", async _v => _v.Response.Redirect("swagger/index.html"));
+
             if (app.Environment.IsDevelopment())
             {
-                app.Map("/", async _v => _v.Response.Redirect("swagger/index.html"));
                 app.Map("/custom_login", (string issuer, string audience, string key) =>
                 {
                     var claims = new List<Claim> { new(ClaimTypes.Role, "admin") };
