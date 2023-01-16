@@ -5,7 +5,7 @@ using WebGP.Application.Data.Queries.GetOnlineBy;
 
 namespace WebGP.Controllers;
 
-[Route("timed")]
+[Route("online")]
 [ApiController]
 public class OnlineController : ControllerBase
 {

@@ -5,7 +5,7 @@ using WebGP.Application.Data.Queries.GetOnlineLogBy;
 
 namespace WebGP.Controllers;
 
-[Route("online")]
+[Route("online_log")]
 [ApiController]
 public class OnlineLogController : ControllerBase
 {
@@ -31,7 +31,7 @@ public class OnlineLogController : ControllerBase
         => _mediator.Send(new GetOnlineLogByUUIDQuery(uuid, from, to));
 
     [HttpGet("user_name/{user_name?}")]
-    public Task<IEnumerable<OnlineLogVM>> GetByUserName(
+    public Task<IDictionary<string, OnlineLogVM>> GetByUserName(
         [FromRoute(Name = "user_name")] string? userName,
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to)
