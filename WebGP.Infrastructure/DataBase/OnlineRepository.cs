@@ -1,19 +1,15 @@
-﻿using Dapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Query;
+﻿using System.Data;
+using Dapper;
 using MySql.Data.MySqlClient;
-using System.Data;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.VM;
 using WebGP.Domain.Entities;
 
-namespace WebGP.Infrastructure.DataBase
+namespace WebGP.Infrastructure.DataBase;
+
+public class OnlineRepository : IOnlineRepository
 {
-    public class OnlineRepository : IOnlineRepository
-    {
-        private readonly IDbConnection _connection;
-        private const string SELECT_ONLINE_QUERY = @"
+    private const string SELECT_ONLINE_QUERY = @"
             SELECT
 	            online.timed_id AS 'timed_id',
 	            online.`uuid` AS 'uuid',
@@ -30,7 +26,7 @@ namespace WebGP.Infrastructure.DataBase
             LEFT JOIN role_work_readonly r ON users.`work` = r.id AND r.`type` = 'WORK'
             LEFT JOIN role_work_readonly w ON users.`role` = w.id AND w.`type` = 'ROLE'";
 
-        private const string SELECT_ONLINE_LOG_QUERY = @"
+    private const string SELECT_ONLINE_LOG_QUERY = @"
             SELECT
                 online_logs.day,
                 online_logs.sec
@@ -40,44 +36,50 @@ namespace WebGP.Infrastructure.DataBase
                 AND online_logs.day >= @from
                 AND online_logs.day <= @to";
 
-        public OnlineRepository(string connectionString)
-        {
-            _connection = new MySqlConnection(connectionString);
-        }
+    private readonly IDbConnection _connection;
 
-        public Task<IEnumerable<OnlineVM>> GetOnlineListAsync()
-        {
-            return _connection.QueryAsync<OnlineVM>(SELECT_ONLINE_QUERY);
-        }
+    public OnlineRepository(string connectionString)
+    {
+        _connection = new MySqlConnection(connectionString);
+    }
 
-        public Task<IEnumerable<OnlineLog>> GetOnlineLogListByUserNameAsync(string userName, DateTime from, DateTime to)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("from", from);
-            parameters.Add("to", to);
-            parameters.Add("value", userName);
-            return _connection.QueryAsync<OnlineLog>(new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.user_name = @value"), parameters));
-        }
-        public Task<IEnumerable<OnlineLog>> GetOnlineLogListByUuidAsync(string uuid, DateTime from, DateTime to)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("from", from);
-            parameters.Add("to", to);
-            parameters.Add("value", uuid);
-            return _connection.QueryAsync<OnlineLog>(new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.uuid = @value"), parameters));
-        }
-        public Task<IEnumerable<OnlineLog>> GetOnlineLogListByStaticIDAsync(uint staticID, DateTime from, DateTime to)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("from", from);
-            parameters.Add("to", to);
-            parameters.Add("value", staticID);
-            return _connection.QueryAsync<OnlineLog>(new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.id = @value"), parameters));
-        }
+    public Task<IEnumerable<OnlineVM>> GetOnlineListAsync()
+    {
+        return _connection.QueryAsync<OnlineVM>(SELECT_ONLINE_QUERY);
+    }
 
-        public Task<int> GetOnlineCountAsync()
-        {
-            return _connection.QuerySingleAsync<int>("SELECT COUNT(1) FROM online");
-        }
+    public Task<IEnumerable<OnlineLog>> GetOnlineLogListByUserNameAsync(string userName, DateTime from, DateTime to)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("from", from);
+        parameters.Add("to", to);
+        parameters.Add("value", userName);
+        return _connection.QueryAsync<OnlineLog>(
+            new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.user_name = @value"), parameters));
+    }
+
+    public Task<IEnumerable<OnlineLog>> GetOnlineLogListByUuidAsync(string uuid, DateTime from, DateTime to)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("from", from);
+        parameters.Add("to", to);
+        parameters.Add("value", uuid);
+        return _connection.QueryAsync<OnlineLog>(
+            new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.uuid = @value"), parameters));
+    }
+
+    public Task<IEnumerable<OnlineLog>> GetOnlineLogListByStaticIDAsync(uint staticID, DateTime from, DateTime to)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("from", from);
+        parameters.Add("to", to);
+        parameters.Add("value", staticID);
+        return _connection.QueryAsync<OnlineLog>(
+            new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.id = @value"), parameters));
+    }
+
+    public Task<int> GetOnlineCountAsync()
+    {
+        return _connection.QuerySingleAsync<int>("SELECT COUNT(1) FROM online");
     }
 }

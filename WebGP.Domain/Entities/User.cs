@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace WebGP.Domain.Entities;
 
-namespace WebGP.Domain.Entities;
-
-public partial class User
+public class User
 {
     public int Id { get; set; }
 

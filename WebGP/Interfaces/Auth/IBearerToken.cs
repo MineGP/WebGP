@@ -1,7 +1,6 @@
-﻿namespace WebGP.Interfaces.Auth
+﻿namespace WebGP.Interfaces.Auth;
+
+public interface IBearerToken
 {
-    public interface IBearerToken
-    {
-        string Token { get; }
-    }
+    string Token { get; }
 }

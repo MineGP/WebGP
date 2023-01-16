@@ -1,6 +1,5 @@
-﻿namespace WebGP.Models.DataBase.Self
+﻿namespace WebGP.Models.DataBase.Self;
+
+public class ClientAPI
 {
-    public class ClientAPI
-    {
-    }
 }
