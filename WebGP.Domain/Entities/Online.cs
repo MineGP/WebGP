@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace WebGP.Domain.Entities;
 
-namespace WebGP.Domain.Entities;
-
-public partial class Online
+public class Online
 {
     public string Uuid { get; set; } = null!;
 

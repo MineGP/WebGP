@@ -1,28 +1,29 @@
 ﻿using FluentValidation;
 
-namespace WebGP.Middlewares
+namespace WebGP.Middlewares;
+
+public class ErrorHandlingMiddleware
 {
-    public class ErrorHandlingMiddleware
+    private readonly RequestDelegate next;
+
+    public ErrorHandlingMiddleware(RequestDelegate next)
     {
-        readonly RequestDelegate next;
-        public ErrorHandlingMiddleware(RequestDelegate next)
+        this.next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            this.next = next;
+            await next.Invoke(context);
         }
-        public async Task InvokeAsync(HttpContext context)
+        catch (ValidationException)
         {
-            try
-            {
-                await next.Invoke(context);
-            }
-            catch (ValidationException)
-            {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            }
-            catch
-            {
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            }
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        }
+        catch
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
         }
     }
 }

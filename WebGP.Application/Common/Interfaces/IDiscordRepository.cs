@@ -1,9 +1,8 @@
 ﻿using WebGP.Application.Common.VM;
 
-namespace WebGP.Application.Common.Interfaces
+namespace WebGP.Application.Common.Interfaces;
+
+public interface IDiscordRepository
 {
-    public interface IDiscordRepository
-    {
-        Task<IEnumerable<DiscordVM>> GetDiscordListAsync();
-    }
+    Task<IEnumerable<DiscordVM>> GetDiscordListAsync();
 }

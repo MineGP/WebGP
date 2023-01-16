@@ -1,11 +1,11 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using WebGP;
-using System.Text;
 using WebGP.Application;
 using WebGP.Infrastructure;
 using WebGP.Interfaces.Config;
@@ -26,7 +26,7 @@ public class Program
             builder.Services.AddApplicationServices();
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddServerServices(builder.Configuration);
-            
+
             builder.Host.UseSerilog();
 
             var app = builder.Build();
@@ -49,32 +49,34 @@ public class Program
                 app.Map("/", async _v => _v.Response.Redirect("swagger/index.html"));
                 app.Map("/custom_login", (string issuer, string audience, string key) =>
                 {
-                    var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
+                    var claims = new List<Claim> { new(ClaimTypes.Role, "admin") };
                     var jwt = new JwtSecurityToken(
-                            issuer: issuer,
-                            audience: audience,
-                            expires: DateTime.MaxValue,
-                            claims: claims,
-                            signingCredentials: 
-                                new SigningCredentials(
-                                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), 
-                                    SecurityAlgorithms.HmacSha256));
+                        issuer: issuer,
+                        audience: audience,
+                        expires: DateTime.MaxValue,
+                        claims: claims,
+                        signingCredentials: 
+                            new SigningCredentials(
+                                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), 
+                                SecurityAlgorithms.HmacSha256));
 
                     return new JwtSecurityTokenHandler().WriteToken(jwt);
                 });
                 app.Map("/debug_login", () =>
                 {
-                    var claims = new List<Claim> { new Claim(ClaimTypes.Role, "admin") };
+                    var claims = new List<Claim> { new(ClaimTypes.Role, "admin") };
                     var jwt = new JwtSecurityToken(
-                            issuer: jwtConfig.Issuer,
-                            audience: jwtConfig.Audience,
-                            expires: DateTime.UtcNow + TimeSpan.FromDays(360),
-                            claims: claims,
-                            signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(), SecurityAlgorithms.HmacSha256));
+                        jwtConfig.Issuer,
+                        jwtConfig.Audience,
+                        expires: DateTime.UtcNow + TimeSpan.FromDays(360),
+                        claims: claims,
+                        signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(),
+                            SecurityAlgorithms.HmacSha256));
 
                     return new JwtSecurityTokenHandler().WriteToken(jwt);
                 });
             }
+
             app.MapControllers();
             app.Run();
         }

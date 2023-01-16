@@ -1,13 +1,16 @@
-﻿namespace WebGP.Interfaces
+﻿namespace WebGP.Interfaces;
+
+public enum Status
 {
-    public enum Status
-    {
-        Error,
-        Success
-    }
-    public interface IResponse
-    {
-        Status Status { get; }
-    }
-    public interface IResponseOrError<T> : IResponse { }
+    Error,
+    Success
+}
+
+public interface IResponse
+{
+    Status Status { get; }
+}
+
+public interface IResponseOrError<T> : IResponse
+{
 }
