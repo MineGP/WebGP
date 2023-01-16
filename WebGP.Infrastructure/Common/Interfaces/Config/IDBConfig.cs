@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace WebGP.Interfaces.Config
+﻿namespace WebGP.Interfaces.Config
 {
     public interface IDBConfig
     {

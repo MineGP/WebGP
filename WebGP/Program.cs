@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -6,8 +5,7 @@ using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using WebGP.Application;
-using WebGP.Application.Common.Interfaces;
-using WebGP.Infrastructure.DataBase;
+using WebGP.Infrastructure;
 using WebGP.Interfaces.Config;
 using WebGP.Middlewares;
 using WebGP.Models.Config;
@@ -26,15 +24,9 @@ public class Program
 
             IJwtConfig jwtConfig = builder.Configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
 
-            IDBConfig dbCofigSelf = builder.Configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!;
-            IDBConfig dbCofigGP = builder.Configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!;
-
-            string connetionStringSelf = dbCofigSelf.GetConnectionString();
-            string connetionStringGP = dbCofigGP.GetConnectionString();
-
             builder.Services.AddSingleton(jwtConfig);
-            builder.Services.AddScoped<ITimedRepository, TimedRepository>(v => new TimedRepository(connetionStringSelf));
             builder.Services.AddApplicationServices();
+            builder.Services.AddInfrastructureServices(builder.Configuration);
 
             builder.Services.AddControllersWithViews();
 
