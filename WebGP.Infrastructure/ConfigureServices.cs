@@ -14,12 +14,12 @@ namespace WebGP.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            string connetionStringSelf = configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!.GetConnectionString();
-            string connetionStringGP = configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!.GetConnectionString();
+            var connectionStringSelf = configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!.GetConnectionString();
+            var connectionStringGp = configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!.GetConnectionString();
 
             return services
                 .AddDbContext<IContext, ApplicationDbContext>(options => options
-                    .UseMySql(connetionStringGP, ServerVersion.Create(10, 0, 0, ServerType.MariaDb)))
+                    .UseMySql(connectionStringGp, ServerVersion.Create(10, 0, 0, ServerType.MariaDb)))
                 .AddRpGenerator(options => options.RunCommand = configuration
                     .GetValue<string>("RpGenerator:RunCommand")!);
         }
