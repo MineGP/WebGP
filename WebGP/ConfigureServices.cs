@@ -17,7 +17,6 @@ namespace WebGP
 
             IJwtConfig jwtConfig = configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
 
-            services.AddAuthorization();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -32,6 +31,19 @@ namespace WebGP
                         ValidateIssuerSigningKey = true,
                     };
                 });
+            services.AddAuthorizationBuilder()
+                .AddPolicy("full_access", policy => policy
+                    .RequireAssertion(context =>
+                        context.User.IsInRole("admin")))
+                .AddPolicy("script_access", policy => policy
+                    .RequireAssertion(context =>
+                        context.User.IsInRole("admin") ||
+                        context.User.IsInRole("script")))
+                .AddPolicy("query_access", policy => policy
+                    .RequireAssertion(context =>
+                        context.User.IsInRole("admin") ||
+                        context.User.IsInRole("query")));
+
             services.AddSwaggerGen(options =>
             {
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
