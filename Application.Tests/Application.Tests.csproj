@@ -21,4 +21,8 @@
     <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="data\" />
+  </ItemGroup>
+
 </Project>
