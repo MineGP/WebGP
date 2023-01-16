@@ -5,7 +5,7 @@ using WebGP.Application.Data.Queries.GetOnlineLogBy;
 
 namespace WebGP.Controllers;
 
-[Route("online")]
+[Route("online_log")]
 [ApiController]
 public class OnlineLogController : ControllerBase
 {
