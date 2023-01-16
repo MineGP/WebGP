@@ -45,11 +45,11 @@ public class GetOnlineByQueryHandler :
             .SelectMany(v => v.Discords.DefaultIfEmpty(), (v, Discord) => new { v.Online, v.User, Discord })
             .Join(
                 _context.RoleWorkReadonlies.Where(role => role.Type == "ROLE"),
-                v => v.User == null ? 0 : v.User.Work ?? 0,
+                v => v.User == null ? 0 : v.User.Role,
                 r => r.Id,
                 (v, Role) => new { v.Online, v.User, v.Discord, Role })
             .Join(
-                _context.RoleWorkReadonlies.Where(role => role.Type == "WORK"),
+                _context.RoleWorkReadonlies.Where(work => work.Type == "WORK"),
                 v => v.User == null ? 0 : v.User.Work ?? 0,
                 r => r.Id,
                 (v, Work) => new { v.Online, v.User, v.Discord, v.Role, Work })
