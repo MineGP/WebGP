@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using WebGP;
 using WebGP.Application;
 using WebGP.Infrastructure;
 using WebGP.Interfaces.Config;
@@ -17,66 +18,17 @@ public class Program
         Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
         try
         {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
-            {
-                Args = args
-            });
+            var builder = WebApplication.CreateBuilder(args);
 
             IJwtConfig jwtConfig = builder.Configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
 
-            builder.Services.AddSingleton(jwtConfig);
             builder.Services.AddApplicationServices();
             builder.Services.AddInfrastructureServices(builder.Configuration);
-
-            builder.Services.AddControllersWithViews();
-
-            builder.Services.AddAuthorization();
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = jwtConfig.Issuer,
-                        ValidateAudience = true,
-                        ValidAudience = jwtConfig.Audience,
-                        ValidateLifetime = true,
-                        IssuerSigningKey = jwtConfig.GetSecurityKey(),
-                        ValidateIssuerSigningKey = true,
-                    };
-                });
-
-            builder.Services.AddSwaggerGen(options =>
-            {
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter a valid token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type=ReferenceType.SecurityScheme,
-                                Id="Bearer"
-                            }
-                        },
-                        new string[]{}
-                    }
-                });
-            });
-
-            builder.Services.AddSingleton(Log.Logger);
+            builder.Services.AddServerServices(builder.Configuration);
+            
             builder.Host.UseSerilog();
 
-            WebApplication app = builder.Build();
+            var app = builder.Build();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
             if (app.Environment.IsDevelopment())
