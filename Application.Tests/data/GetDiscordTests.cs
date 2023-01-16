@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.VM;
-using WebGP.Application.Data.Queries.GetDiscordByID;
+using WebGP.Application.Data.Queries.GetDiscordBy;
 
 namespace Application.Tests.data
 {

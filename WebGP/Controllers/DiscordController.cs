@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebGP.Application.Common.VM;
-using WebGP.Application.Data.Queries.GetDiscordByID;
+using WebGP.Application.Data.Queries.GetDiscordBy;
 
 namespace WebGP.Controllers
 {

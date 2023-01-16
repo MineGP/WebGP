@@ -1,4 +1,7 @@
 ﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Query;
 using MySql.Data.MySqlClient;
 using System.Data;
 using WebGP.Application.Common.Interfaces;

@@ -1,10 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
 
-namespace WebGP.Domain.Entities
+namespace WebGP.Domain.Entities;
+
+public partial class OnlineLog
 {
-    public class OnlineLog
-    {
-        [JsonPropertyName("day")] public DateTime Day { get; set; }
-        [JsonPropertyName("sec")] public int Seconds { get; set; }
-    }
+    public int Id { get; set; }
+
+    public DateOnly Day { get; set; }
+
+    public int Sec { get; set; }
 }

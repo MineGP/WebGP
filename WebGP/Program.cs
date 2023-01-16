@@ -21,12 +21,9 @@ public class Program
 
             IJwtConfig jwtConfig = builder.Configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
 
-            IDBConfig dbCofigSelf = builder.Configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!;
-            IDBConfig dbCofigGP = builder.Configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!;
-
             builder.Services.AddSingleton(jwtConfig);
             builder.Services.AddApplicationServices();
-            builder.Services.AddInfrastructureServices(dbCofigSelf, dbCofigGP);
+            builder.Services.AddInfrastructureServices(builder.Configuration);
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddAuthorization();
@@ -67,10 +64,9 @@ public class Program
             app.MapControllers();
             if (app.Environment.IsDevelopment())
             {
-                app.UseEndpoints(v =>
-                {
-                    v.MapGet("/", async _v => _v.Response.Redirect("swagger/index.html"));
-                });
+#pragma warning disable CS1998 // В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод
+                app.MapGet("/", async _v => _v.Response.Redirect("swagger/index.html"));
+#pragma warning restore CS1998 // В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод
             }
             app.Run();
         }

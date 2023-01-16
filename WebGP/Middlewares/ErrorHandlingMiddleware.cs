@@ -15,7 +15,7 @@ namespace WebGP.Middlewares
             {
                 await next.Invoke(context);
             }
-            catch (ValidationException e)
+            catch (ValidationException)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
             }
