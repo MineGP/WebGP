@@ -14,8 +14,7 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connetionStringSelf =
-            configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!.GetConnectionString();
+        var connetionStringSelf = configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!.GetConnectionString();
         var connetionStringGP = configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!.GetConnectionString();
 
         return services
