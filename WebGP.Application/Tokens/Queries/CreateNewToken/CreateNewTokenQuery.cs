@@ -8,11 +8,8 @@ using WebGP.Application.Common.Interfaces;
 
 namespace WebGP.Application.Tokens.Queries.CreateNewToken
 {
-    public class CreateNewTokenQuery : IRequest<string>
-    {
-        public IEnumerable<string> Roles { get; set; } = null!;
-        public int Days { get; set; }
-    }
+    public record CreateNewTokenQuery(IEnumerable<string> Roles, int Days) : IRequest<string>;
+
     public class CreateNewTokenQueryHandler : IRequestHandler<CreateNewTokenQuery, string>
     {
         private readonly IJwtService _jwtService;

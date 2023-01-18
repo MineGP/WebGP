@@ -1,42 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WebGP.Application.Tokens.Queries.CreateNewToken;
 
 namespace WebGP.Controllers;
 
 [Route("auth")]
 public class AuthController : Controller
 {
-    /*
-    public IJwtConfig JWT { get; }
-    public ISqlContext SQL { get; }
-    public AuthController(IJwtConfig jwt, ISqlContext sql)
+    private readonly IMediator _mediator;
+    public AuthController(IMediator mediator)
     {
-        JWT = jwt;
-        SQL = sql;
+        _mediator = mediator;
     }
-    [Route("login")] public IResponseOrError<IBearerToken> Login([FromQuery(Name = "user")] string user, [FromQuery(Name = "password")] string password)        
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user)
-        };
-        var jwt = new JwtSecurityToken(
-                issuer: JWT.Issuer,
-                audience: JWT.Audience,
-                claims: claims,
-                expires: DateTime.UtcNow.Add(JWT.Expires),
-                signingCredentials: new SigningCredentials(JWT.GetSecurityKey(), SecurityAlgorithms.HmacSha256));
+    // admin gets new login
+    [HttpPost("new_token")]
+    [Authorize(Policy = "full_access")]
+    public Task<string> CreateNewToken(
+        [FromQuery] IEnumerable<string> roles,
+        [FromQuery] int day)
+        => _mediator.Send(new CreateNewTokenQuery(roles, day));
 
-        return new Response<IBearerToken>(new BearerToken(new JwtSecurityTokenHandler().WriteToken(jwt)));
-    }
-    /*[Authorize] [Route("refresh-token")] public IResponse Refresh()
-    {
-        /*var jwt = new JwtSecurityToken(
-                issuer: JWT.Issuer,
-                audience: JWT.Audience,
-                claims: claims,
-                expires: DateTime.UtcNow.Add(JWT.Expires),
-                signingCredentials: new SigningCredentials(JWT.GetSecurityKey(), SecurityAlgorithms.HmacSha256));
 
-        return new Response<IBearerToken>(new BearerToken(new JwtSecurityTokenHandler().WriteToken(jwt)));*/
-    //}
 }
