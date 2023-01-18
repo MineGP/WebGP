@@ -52,7 +52,7 @@ public class Program
                     var jwt = new JwtSecurityToken(
                         issuer: issuer,
                         audience: audience,
-                        expires: DateTime.MaxValue,
+                        expires: DateTime.UtcNow + TimeSpan.FromDays(360),
                         claims: claims,
                         signingCredentials: 
                             new SigningCredentials(
