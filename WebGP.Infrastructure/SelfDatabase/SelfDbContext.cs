@@ -16,6 +16,7 @@ namespace WebGP.Infrastructure.SelfDatabase
             {
                 entity.ToTable("admins");
                 entity.HasKey(e => e.Id);
+                entity.HasAlternateKey(e => e.Token);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id");

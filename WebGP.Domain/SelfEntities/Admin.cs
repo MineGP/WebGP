@@ -1,5 +1,5 @@
 ﻿namespace WebGP.Domain.SelfEntities;
-public class Admin
+public class Admin : IAuditableEntity
 {
     public int Id { get; set; }
     public string RoleName { get; set; } = null!;
