@@ -21,7 +21,9 @@ public static class ConfigureServices
 
         services.AddJwtService(options =>
         {
-            options.Key = "123";
+            options.Key = configuration.GetValue<string>("Jwt:Key")!;
+            options.Audience = configuration.GetValue<string>("Jwt:Audience")!;
+            options.Issuer = configuration.GetValue<string>("Jwt:Issuer")!;
         });
 
         services.AddDbContext<IContext, ApplicationDbContext>(options => options
