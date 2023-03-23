@@ -11,7 +11,7 @@ using WebGP.Infrastructure.SelfDatabase;
 namespace WebGP.Infrastructure.SelfDatabase.Migrations
 {
     [DbContext(typeof(SelfDbContext))]
-    [Migration("20230322195202_Initional")]
+    [Migration("20230323101650_Initional")]
     partial class Initional
     {
         /// <inheritdoc />
@@ -49,10 +49,12 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(95)")
                         .HasColumnName("token");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Token");
 
                     b.HasIndex("CreatedById")
                         .IsUnique();

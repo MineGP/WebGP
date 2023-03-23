@@ -23,7 +23,7 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     role = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    token = table.Column<string>(type: "longtext", nullable: false)
+                    token = table.Column<string>(type: "varchar(512)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     note = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -33,6 +33,7 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_admins", x => x.id);
+                    table.UniqueConstraint("AK_admins_token", x => x.token);
                     table.ForeignKey(
                         name: "FK_admins_admins_created_by_id",
                         column: x => x.created_by_id,

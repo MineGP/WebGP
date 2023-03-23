@@ -46,10 +46,12 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(95)")
                         .HasColumnName("token");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Token");
 
                     b.HasIndex("CreatedById")
                         .IsUnique();

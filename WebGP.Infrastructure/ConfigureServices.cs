@@ -30,6 +30,8 @@ public static class ConfigureServices
             .UseMySql(connectionStringSelf, ServerVersion.Create(10, 0, 0, ServerType.MariaDb)));
         services.AddRpGenerator(options => options.RunCommand = configuration
             .GetValue<string>("RpGenerator:RunCommand")!);
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 

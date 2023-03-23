@@ -21,4 +21,8 @@
         <ProjectReference Include="..\WebGP.Domain\WebGP.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="SelfDatabase\Migrations\" />
+    </ItemGroup>
+
 </Project>
