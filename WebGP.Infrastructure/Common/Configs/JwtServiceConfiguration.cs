@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebGP.Infrastructure.Identity
+namespace WebGP.Infrastructure.Common.Configs
 {
     public class JwtServiceConfiguration
     {
