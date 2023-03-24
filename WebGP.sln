@@ -27,11 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{16CBE57A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "Application.Tests\Application.Tests.csproj", "{6F5D615E-B3EA-47D3-A2BD-C46441BB887A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{832B253F-6BD8-43DE-BB6E-E4A9479D3A7D}"
-	ProjectSection(SolutionItems) = preProject
-		Migrations\dump.sql = Migrations\dump.sql
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,7 +67,6 @@ Global
 		{3B497276-48B9-4B3B-AB58-F4D03027E7B3} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
 		{79D97050-FD4A-4EAE-98D0-C603C43D70DC} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
 		{6F5D615E-B3EA-47D3-A2BD-C46441BB887A} = {4A82D7B3-2CC3-4857-9C5B-49AC707DE83C}
-		{832B253F-6BD8-43DE-BB6E-E4A9479D3A7D} = {16CBE57A-7FCE-4C10-9F04-94116DF6FBB5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF60AFB2-ACFE-4C22-A4E4-30695A9B0C7B}
