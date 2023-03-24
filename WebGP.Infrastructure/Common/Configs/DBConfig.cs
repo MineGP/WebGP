@@ -17,6 +17,8 @@ public class DBConfig : IDBConfig
         Port = Port,
         Database = DataBase,
         UserID = User,
-        Password = Password
+        Password = Password,
+        ConnectionTimeout = 60,
+        Pooling = false
     }.ConnectionString;
 }

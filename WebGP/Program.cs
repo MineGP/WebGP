@@ -1,10 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using WebGP;
 using WebGP.Application;
 using WebGP.Infrastructure;
+using WebGP.Infrastructure.DataBase;
+using WebGP.Infrastructure.SelfDatabase;
 using WebGP.Interfaces.Config;
 using WebGP.Middlewares;
 using WebGP.Models.Config;
@@ -23,6 +27,20 @@ try
     builder.Host.UseSerilog();
 
     var app = builder.Build();
+
+    // MIGRATIONS FOR THE MAIN DB ONLY FOR DEV CONTAINERS
+    if (app.Environment.IsDevelopment())
+    {
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        db.Database.Migrate();
+    }
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<SelfDbContext>();
+        db.Database.Migrate();
+    }
 
     app.UseMiddleware<ErrorHandlingMiddleware>();
 

@@ -27,9 +27,9 @@ public static class ConfigureServices
         });
 
         services.AddDbContext<IContext, ApplicationDbContext>(options => options
-            .UseMySql(connectionStringGp, ServerVersion.Create(10, 0, 0, ServerType.MariaDb)));
+            .UseMySql(connectionStringGp, ServerVersion.Create(10, 6, 12, ServerType.MariaDb)));
         services.AddDbContext<SelfDbContext>(options => options
-            .UseMySql(connectionStringSelf, ServerVersion.Create(10, 0, 0, ServerType.MariaDb)));
+            .UseMySql(connectionStringSelf, ServerVersion.Create(10, 6, 12, ServerType.MariaDb)));
         services.AddRpGenerator(options => options.RunCommand = configuration
             .GetValue<string>("RpGenerator:RunCommand")!);
 
