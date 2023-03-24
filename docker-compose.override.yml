@@ -23,12 +23,24 @@ services:
       - JWT__Key=${JWT_KEY}
     ports:
       - "${API_OUT_PORT}:80"
-  database:
+  self_db:
     platform: linux/x86_64
     environment:
       MARIADB_VERSION: "10.6"
       MARIADB_ROOT_PASSWORD: ${SELF_PASSWORD}
+      MARIADB_DATABASE: ${SELF_DB}
     ports:
       - "${SELF_PORT}:3306"
     volumes:
-      - ./mariadb_data:/var/lib/mysql
+      - ./self_db_data:/var/lib/mysql
+
+  gp_db:
+    platform: linux/x86_64
+    environment:
+      MARIADB_VERSION: "10.6"
+      MARIADB_ROOT_PASSWORD: ${GP_PASSWORD}
+      MARIADB_DATABASE: ${GP_DB}
+    ports:
+      - "${GP_PORT}:3306"
+    volumes:
+      - ./gp_db_data:/var/lib/mysql
