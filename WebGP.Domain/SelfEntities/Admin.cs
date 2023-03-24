@@ -8,5 +8,5 @@ public class Admin : IAuditableEntity
     public DateTime RegistrationTime { get; set; }
 
     public int? CreatedById { get; set; }
-    public virtual Admin? CreatedBy { get; set; } = null!;
+    public virtual Admin? CreatedBy { get; set; } = null;
 }
