@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using WebGP.Application.Common.Interfaces;
 using WebGP.Interfaces.Config;
 using WebGP.Models.Config;
 
@@ -14,6 +15,9 @@ namespace WebGP
         {
             services.AddControllers();
             services.AddSingleton(Log.Logger);
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             IJwtConfig jwtConfig = configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
 

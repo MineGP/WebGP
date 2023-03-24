@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebGP.Application.Tokens.Queries.CreateNewToken;
+using WebGP.Application.Tokens.Queries.CreateAdminToken;
+using WebGP.Application.Tokens.Queries.GetAccessToken;
 
 namespace WebGP.Controllers;
 
@@ -13,13 +14,17 @@ public class AuthController : Controller
     {
         _mediator = mediator;
     }
-    // admin gets new login
+    
     [HttpPost("new_token")]
     [Authorize(Policy = "full_access")]
-    public Task<string> CreateNewToken(
-        [FromQuery] IEnumerable<string> roles,
-        [FromQuery] int day)
-        => _mediator.Send(new CreateNewTokenQuery(roles, day));
+    public Task<string> CreateNewUserToken(
+        [FromBody] CreateAdminTokenQuery model)
+        => _mediator.Send(model);
 
+    [HttpPost("get_access")]
+    [AllowAnonymous]
+    public Task<string> GetNewAccessToken(
+        [FromBody] GetAccessTokenQuery model)
+        => _mediator.Send(model);
 
 }

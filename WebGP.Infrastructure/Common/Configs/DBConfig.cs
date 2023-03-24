@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using WebGP.Interfaces.Config;
 
-namespace WebGP.Models.Config;
+namespace WebGP.Infrastructure.Common.Configs;
 
 public class DBConfig : IDBConfig
 {
