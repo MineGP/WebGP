@@ -217,9 +217,7 @@ namespace WebGP.Infrastructure.DataBase.Migrations
 
             migrationBuilder.DropTable(
                 name: "work_readonly");
-            migrationBuilder.Sql("""
-                DROP VIEW `role_work_readonly`;
-                """);
+            migrationBuilder.Sql("DROP VIEW `role_work_readonly`;");
         }
     }
 }
