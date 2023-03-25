@@ -11,7 +11,7 @@ using WebGP.Infrastructure.SelfDatabase;
 namespace WebGP.Infrastructure.SelfDatabase.Migrations
 {
     [DbContext(typeof(SelfDbContext))]
-    [Migration("20230323101650_Initional")]
+    [Migration("20230325160833_Initional")]
     partial class Initional
     {
         /// <inheritdoc />
@@ -39,7 +39,7 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
                         .HasColumnName("note");
 
                     b.Property<DateTime>("RegistrationTime")
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("registration_time");
 
                     b.Property<string>("RoleName")
@@ -49,15 +49,14 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("varchar(95)")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("token");
 
                     b.HasKey("Id");
 
                     b.HasAlternateKey("Token");
 
-                    b.HasIndex("CreatedById")
-                        .IsUnique();
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("admins", (string)null);
                 });
@@ -65,10 +64,15 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
             modelBuilder.Entity("WebGP.Domain.SelfEntities.Admin", b =>
                 {
                     b.HasOne("WebGP.Domain.SelfEntities.Admin", "CreatedBy")
-                        .WithOne()
-                        .HasForeignKey("WebGP.Domain.SelfEntities.Admin", "CreatedById");
+                        .WithMany("Created")
+                        .HasForeignKey("CreatedById");
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("WebGP.Domain.SelfEntities.Admin", b =>
+                {
+                    b.Navigation("Created");
                 });
 #pragma warning restore 612, 618
         }

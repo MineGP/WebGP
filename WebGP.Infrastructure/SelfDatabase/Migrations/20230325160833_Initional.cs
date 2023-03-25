@@ -27,7 +27,7 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     note = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    registration_time = table.Column<DateTime>(type: "datetime", nullable: false),
+                    registration_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     created_by_id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -45,8 +45,7 @@ namespace WebGP.Infrastructure.SelfDatabase.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_admins_created_by_id",
                 table: "admins",
-                column: "created_by_id",
-                unique: true);
+                column: "created_by_id");
         }
 
         /// <inheritdoc />

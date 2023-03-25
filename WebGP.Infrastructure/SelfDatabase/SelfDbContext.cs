@@ -37,9 +37,9 @@ namespace WebGP.Infrastructure.SelfDatabase
                 entity.Property(e => e.CreatedById)
                     .HasColumnName("created_by_id");
 
-                entity.HasOne(e => e.CreatedBy)
-                    .WithOne()
-                    .HasForeignKey<Admin>(a => a.CreatedById);
+                entity.HasMany(e => e.Created)
+                    .WithOne(a => a.CreatedBy)
+                    .HasForeignKey(a => a.CreatedById);
             });
         }
     }

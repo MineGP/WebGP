@@ -9,4 +9,5 @@ public class Admin : IAuditableEntity
 
     public int? CreatedById { get; set; }
     public virtual Admin? CreatedBy { get; set; } = null;
+    public virtual ICollection<Admin> Created { get; set; } = null!;
 }
