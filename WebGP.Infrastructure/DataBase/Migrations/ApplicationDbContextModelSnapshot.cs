@@ -16,7 +16,7 @@ namespace WebGP.Infrastructure.DataBase.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseCollation("utf8mb4_unicode_ci")
+                .UseCollation("utf8mb4_general_ci")
                 .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
@@ -29,7 +29,7 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .HasColumnName("discord_id");
 
                     b.Property<DateTime>("LastUpdate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime")
                         .HasColumnName("last_update")
                         .HasDefaultValueSql("current_timestamp()");
@@ -47,6 +47,8 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .IsUnique();
 
                     b.ToTable("discord", (string)null);
+
+                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_unicode_ci");
                 });
 
             modelBuilder.Entity("WebGP.Domain.Entities.Online", b =>
@@ -56,9 +58,38 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .HasColumnType("varchar(36)")
                         .HasColumnName("uuid");
 
+                    b.Property<string>("DataIcon")
+                        .HasColumnType("text")
+                        .HasColumnName("data_icon");
+
+                    b.Property<string>("DataName")
+                        .HasColumnType("text")
+                        .HasColumnName("data_name");
+
+                    b.Property<bool>("Die")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("die");
+
+                    b.Property<string>("Gpose")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("enum('SIT','LAY','NONE')")
+                        .HasColumnName("gpose")
+                        .HasDefaultValueSql("'NONE'");
+
+                    b.Property<bool>("Hide")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("hide");
+
                     b.Property<bool>("IsOp")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_op");
+
+                    b.Property<DateTime>("LastUpdate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime")
+                        .HasColumnName("last_update")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.Property<string>("SkinUrl")
                         .HasColumnType("text")
@@ -84,10 +115,16 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .HasColumnType("double")
                         .HasColumnName("z");
 
+                    b.Property<string>("ZoneSelector")
+                        .HasColumnType("text")
+                        .HasColumnName("zone_selector");
+
                     b.HasKey("Uuid")
                         .HasName("PRIMARY");
 
                     b.ToTable("online", (string)null);
+
+                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_unicode_ci");
                 });
 
             modelBuilder.Entity("WebGP.Domain.Entities.OnlineLog", b =>
@@ -104,18 +141,91 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .HasColumnType("int(11)")
                         .HasColumnName("sec");
 
+                    b.Property<int>("SecAban")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("sec_aban");
+
+                    b.Property<int>("SecAfk")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("sec_afk");
+
                     b.HasKey("Id", "Day")
                         .HasName("PRIMARY")
                         .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
                     b.ToTable("online_logs", (string)null);
+
+                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_unicode_ci");
+                });
+
+            modelBuilder.Entity("WebGP.Domain.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int(11)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6)")
+                        .HasColumnName("color")
+                        .HasDefaultValueSql("'FFFFFF'");
+
+                    b.Property<long?>("DiscordRole")
+                        .HasColumnType("bigint(20)")
+                        .HasColumnName("discord_role");
+
+                    b.Property<string>("HeadData")
+                        .HasColumnType("text")
+                        .HasColumnName("head_data");
+
+                    b.Property<int>("IdGroup")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("id_group");
+
+                    b.Property<DateTime>("LastUpdate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime")
+                        .HasColumnName("last_update")
+                        .HasDefaultValueSql("current_timestamp()");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<long>("PermMenu")
+                        .HasColumnType("bigint(20)")
+                        .HasColumnName("perm_menu");
+
+                    b.Property<long>("PermMenuLocal")
+                        .HasColumnType("bigint(20)")
+                        .HasColumnName("perm_menu_local");
+
+                    b.Property<int>("Permissions")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("permissions");
+
+                    b.Property<sbyte>("Static")
+                        .HasColumnType("tinyint(4)")
+                        .HasColumnName("static");
+
+                    b.HasKey("Id")
+                        .HasName("PRIMARY");
+
+                    b.ToTable("roles", (string)null);
+
+                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_unicode_ci");
                 });
 
             modelBuilder.Entity("WebGP.Domain.Entities.RoleWorkReadonly", b =>
                 {
                     b.Property<string>("Icon")
                         .HasColumnType("mediumtext")
-                        .HasColumnName("icon");
+                        .HasColumnName("icon")
+                        .UseCollation("utf8mb4_unicode_ci");
 
                     b.Property<int>("Id")
                         .HasColumnType("int(11)")
@@ -125,14 +235,16 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("mediumtext")
                         .HasColumnName("name")
-                        .HasDefaultValueSql("''");
+                        .HasDefaultValueSql("''")
+                        .UseCollation("utf8mb4_unicode_ci");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(4)
                         .HasColumnType("varchar(4)")
                         .HasColumnName("type")
-                        .HasDefaultValueSql("''");
+                        .HasDefaultValueSql("''")
+                        .UseCollation("utf8mb4_unicode_ci");
 
                     b.ToTable((string)null);
 
@@ -153,6 +265,12 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                     b.Property<int?>("CardId")
                         .HasColumnType("int(11)")
                         .HasColumnName("card_id");
+
+                    b.Property<int>("CardRegen")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int(11)")
+                        .HasColumnName("card_regen")
+                        .HasDefaultValueSql("'1'");
 
                     b.Property<DateTime>("ConnectDate")
                         .HasColumnType("datetime")
@@ -179,7 +297,7 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .HasColumnName("last_name");
 
                     b.Property<DateTime>("LastUpdate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime")
                         .HasColumnName("last_update")
                         .HasDefaultValueSql("current_timestamp()");
@@ -194,6 +312,12 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                     b.Property<int?>("Phone")
                         .HasColumnType("int(11)")
                         .HasColumnName("phone");
+
+                    b.Property<int>("PhoneRegen")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int(11)")
+                        .HasColumnName("phone_regen")
+                        .HasDefaultValueSql("'3'");
 
                     b.Property<int>("Role")
                         .HasColumnType("int(11)")
@@ -215,6 +339,14 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .HasColumnType("varchar(36)")
                         .HasColumnName("uuid");
 
+                    b.Property<int>("Wanted")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("wanted");
+
+                    b.Property<int>("WantedId")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("wanted_id");
+
                     b.Property<int?>("Work")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(11)")
@@ -235,6 +367,37 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                         .IsUnique();
 
                     b.ToTable("users", (string)null);
+
+                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_unicode_ci");
+                });
+
+            modelBuilder.Entity("WebGP.Domain.Entities.WorkReadonly", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("enum('WORK')")
+                        .HasColumnName("type");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("icon");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id", "Type")
+                        .HasName("PRIMARY")
+                        .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+                    b.ToTable("work_readonly", (string)null);
+
+                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_unicode_ci");
                 });
 #pragma warning restore 612, 618
         }
