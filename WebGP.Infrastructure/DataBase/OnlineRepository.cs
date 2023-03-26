@@ -19,7 +19,7 @@ public class OnlineRepository : IOnlineRepository
             SELECT
 	            online.timed_id AS 'TimedId',
 	            online.`uuid` AS 'Uuid',
-                users.id AS 'Id',
+                users.id AS 'StaticId',
 	            users.first_name AS 'FirstName',
 	            users.last_name AS 'LastName',
 	            discord.discord_id AS 'DiscordId',
