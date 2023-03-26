@@ -1,5 +1,9 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Text;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.VM;
@@ -9,77 +13,95 @@ namespace WebGP.Infrastructure.DataBase;
 
 public class OnlineRepository : IOnlineRepository
 {
-    private const string SELECT_ONLINE_QUERY = @"
+    private readonly ApplicationDbContext _context;
+
+    private const string SelectOnlineQuery = @"
             SELECT
-	            online.timed_id AS 'timed_id',
-	            online.`uuid` AS 'uuid',
-	            users.first_name AS 'first_name',
-	            users.last_name AS 'last_name',
-	            discord.discord_id AS 'discord_id',
-	            r.name AS 'role',
-	            w.name AS 'work',
-	            GetLevel(IFNULL(users.exp,0)) AS 'level',
-                online.skin_url AS 'skin_url'
+	            online.timed_id AS 'TimedId',
+	            online.`uuid` AS 'Uuid',
+                users.id AS 'Id',
+	            users.first_name AS 'FirstName',
+	            users.last_name AS 'LastName',
+	            discord.discord_id AS 'DiscordId',
+	            r.name AS 'Role',
+	            w.name AS 'Work',
+	            GetLevel(IFNULL(users.exp,0)) AS 'Level',
+                online.skin_url AS 'SkinUrl'
             FROM online
             LEFT JOIN users ON users.uuid = online.uuid
             LEFT JOIN discord ON discord.uuid = online.uuid
             LEFT JOIN role_work_readonly r ON users.`work` = r.id AND r.`type` = 'WORK'
             LEFT JOIN role_work_readonly w ON users.`role` = w.id AND w.`type` = 'ROLE'";
 
-    private const string SELECT_ONLINE_LOG_QUERY = @"
-            SELECT
-                online_logs.day,
-                online_logs.sec
-            FROM online_logs
-            INNER JOIN users ON users.id = online_logs.id
-            WHERE {0}
-                AND online_logs.day >= @from
-                AND online_logs.day <= @to";
+    private const string WhereTimedId = @"
+            WHERE online.timed_id = @timed_id";    
+    
+    private const string WhereUuid = @"
+            WHERE online.`uuid` = @uuid";
 
-    private readonly IDbConnection _connection;
+    private const string WhereStaticId = @"
+            WHERE users.id = @id";
 
-    public OnlineRepository(string connectionString)
+    public OnlineRepository(ApplicationDbContext context)
     {
-        _connection = new MySqlConnection(connectionString);
+        _context = context;
     }
 
-    public Task<IEnumerable<OnlineVM>> GetOnlineListAsync()
+    public async Task<OnlineVm?> GetOnlineByTimedIdAsync(int timedId, CancellationToken cancellationToken)
     {
-        return _connection.QueryAsync<OnlineVM>(SELECT_ONLINE_QUERY);
+        var query = SelectOnlineQuery + WhereTimedId + ';';
+        return await _context.Database
+            .SqlQueryRaw<OnlineVm>(query, new SqlParameter("timed_id", timedId))
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<IEnumerable<OnlineLog>> GetOnlineLogListByUserNameAsync(string userName, DateTime from, DateTime to)
+    public async Task<IDictionary<int, OnlineVm>> GetAllOnlineByTimedIdAsync(CancellationToken cancellationToken)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("from", from);
-        parameters.Add("to", to);
-        parameters.Add("value", userName);
-        return _connection.QueryAsync<OnlineLog>(
-            new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.user_name = @value"), parameters));
+        var query = SelectOnlineQuery + ';';
+
+        return await _context.Database
+            .SqlQueryRaw<OnlineVm>(query)
+            .ToDictionaryAsync(v => v.TimedId, v => v, cancellationToken);
     }
 
-    public Task<IEnumerable<OnlineLog>> GetOnlineLogListByUuidAsync(string uuid, DateTime from, DateTime to)
+    public async Task<OnlineVm?> GetOnlineByUuidAsync(string uuid, CancellationToken cancellationToken)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("from", from);
-        parameters.Add("to", to);
-        parameters.Add("value", uuid);
-        return _connection.QueryAsync<OnlineLog>(
-            new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.uuid = @value"), parameters));
+        var query = SelectOnlineQuery + WhereUuid + ';';
+
+        return await _context.Database
+            .SqlQueryRaw<OnlineVm>(query, new SqlParameter("uuid", uuid))
+            .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<IEnumerable<OnlineLog>> GetOnlineLogListByStaticIDAsync(uint staticID, DateTime from, DateTime to)
+    public async Task<IDictionary<string, OnlineVm>> GetAllOnlineByUuidAsync(CancellationToken cancellationToken)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("from", from);
-        parameters.Add("to", to);
-        parameters.Add("value", staticID);
-        return _connection.QueryAsync<OnlineLog>(
-            new CommandDefinition(SELECT_ONLINE_LOG_QUERY.Replace("{0}", "users.id = @value"), parameters));
+        var query = SelectOnlineQuery + ';';
+
+        return await _context.Database
+            .SqlQueryRaw<OnlineVm>(query)
+            .ToDictionaryAsync(v => v.Uuid, v => v, cancellationToken);
     }
 
-    public Task<int> GetOnlineCountAsync()
+    public async Task<OnlineVm?> GetOnlineByStaticIdAsync(uint staticId, CancellationToken cancellationToken)
     {
-        return _connection.QuerySingleAsync<int>("SELECT COUNT(1) FROM online");
+        var query = SelectOnlineQuery + WhereStaticId + ';';
+
+        return await _context.Database
+            .SqlQueryRaw<OnlineVm>(query, new SqlParameter("id", staticId))
+            .SingleOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IDictionary<uint, OnlineVm>> GetAllOnlineByStaticIdAsync(CancellationToken cancellationToken)
+    {
+        var query = WhereStaticId + ';';
+
+        return await _context.Database
+            .SqlQueryRaw<OnlineVm>(query)
+            .ToDictionaryAsync(v => v.StaticId, v => v, cancellationToken);
+    }
+
+    public async Task<int> GetOnlineCountAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Onlines.CountAsync(cancellationToken);
     }
 }

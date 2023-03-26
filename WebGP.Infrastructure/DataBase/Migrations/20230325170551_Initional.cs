@@ -195,6 +195,9 @@ namespace WebGP.Infrastructure.DataBase.Migrations
                 unique: true);
             // creating view
             migrationBuilder.Sql("CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `role_work_readonly` AS select `work_readonly`.`id` AS `id`,`work_readonly`.`type` AS `type`,`work_readonly`.`icon` AS `icon`,`work_readonly`.`name` AS `name` from `work_readonly` union select `roles`.`id` AS `id`,'ROLE' AS `type`,if(octet_length(`roles`.`name`) = 0,'',concat('<#',`roles`.`color`,'>',`roles`.`name`)) AS `icon`,`roles`.`name` AS `name` from `roles`;");
+            migrationBuilder.Sql(
+                "DELIMITER //\r\nCREATE FUNCTION `GetLevel`(`_exp` INT\r\n) RETURNS int(11)\r\nBEGIN\r\n    DECLARE _level INT DEFAULT 0;\r\n    DECLARE _next INT DEFAULT 0;\r\n    WHILE (TRUE) DO\r\n        SET _next = _next + _level * 4;\r\n        IF (_exp < _next) THEN\r\n            RETURN _level - 1;\r\n        END IF;\r\n        SET _level = _level + 1;\r\n    END WHILE;\r\nEND//\r\nDELIMITER ;");
+            migrationBuilder.Sql("DELIMITER //\r\nCREATE FUNCTION `GetExp`(`_level` INT\r\n) RETURNS int(11)\r\nBEGIN\r\n    DECLARE _next INT DEFAULT 0;\r\n    WHILE (TRUE) DO\r\n        SET _next = _next + _level * 4;\r\n        IF (_level = 0) THEN\r\n            RETURN _next;\r\n        END IF;\r\n        SET _level = _level - 1;\r\n    END WHILE;\r\nEND//\r\nDELIMITER ;");
         }
 
         /// <inheritdoc />
