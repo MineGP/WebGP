@@ -8,14 +8,21 @@ services:
       context: .
       dockerfile: WebGP/Dockerfile
     networks:
-      - WebGP_Net
+      - gp_net
     depends_on:
-      - database
-  database:
+      - self_db
+      - gp_db
+
+  self_db:
     image: mariadb:10.6
-    container_name: MariaDB
+    container_name: self_db
     networks:
-      - WebGP_Net
+      - gp_net
+  gp_db:
+    image: mariadb:10.6
+    container_name: gp_db
+    networks:
+        - gp_net
 networks:
-  WebGP_Net:
+  gp_net:
     driver: bridge

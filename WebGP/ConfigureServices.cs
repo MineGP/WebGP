@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using WebGP.Application.Common.Interfaces;
 using WebGP.Interfaces.Config;
 using WebGP.Models.Config;
 
@@ -15,9 +16,11 @@ namespace WebGP
             services.AddControllers();
             services.AddSingleton(Log.Logger);
 
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+
             IJwtConfig jwtConfig = configuration.GetRequiredSection("JWT").Get<JwtConfig>()!;
 
-            services.AddAuthorization();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -32,6 +35,19 @@ namespace WebGP
                         ValidateIssuerSigningKey = true,
                     };
                 });
+            services.AddAuthorizationBuilder()
+                .AddPolicy("full_access", policy => policy
+                    .RequireAssertion(context =>
+                        context.User.IsInRole("admin")))
+                .AddPolicy("script_access", policy => policy
+                    .RequireAssertion(context =>
+                        context.User.IsInRole("admin") ||
+                        context.User.IsInRole("script")))
+                .AddPolicy("query_access", policy => policy
+                    .RequireAssertion(context =>
+                        context.User.IsInRole("admin") ||
+                        context.User.IsInRole("query")));
+
             services.AddSwaggerGen(options =>
             {
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

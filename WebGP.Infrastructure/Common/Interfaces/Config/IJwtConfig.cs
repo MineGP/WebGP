@@ -7,7 +7,6 @@ public interface IJwtConfig
     string Issuer { get; }
     string Audience { get; }
     string Key { get; }
-    TimeSpan Expires { get; }
 
     SymmetricSecurityKey GetSecurityKey();
 }

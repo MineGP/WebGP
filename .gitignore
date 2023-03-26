@@ -365,3 +365,5 @@ FodyWeavers.xsd
 /.env
 
 **.idea
+gp_db_data/
+self_db_data/

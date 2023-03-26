@@ -28,6 +28,14 @@ public class User
 
     public DateTime? RoleTime { get; set; }
 
+    public int PhoneRegen { get; set; }
+
+    public int CardRegen { get; set; }
+
+    public int Wanted { get; set; }
+
+    public int WantedId { get; set; }
+
     public DateTime CreateDate { get; set; }
 
     public DateTime ConnectDate { get; set; }

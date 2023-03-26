@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using WebGP.Interfaces.Config;
 
-namespace WebGP.Models.Config;
+namespace WebGP.Infrastructure.Common.Configs;
 
 public class DBConfig : IDBConfig
 {
@@ -17,6 +17,8 @@ public class DBConfig : IDBConfig
         Port = Port,
         Database = DataBase,
         UserID = User,
-        Password = Password
+        Password = Password,
+        ConnectionTimeout = 60,
+        Pooling = false
     }.ConnectionString;
 }

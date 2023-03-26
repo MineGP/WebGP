@@ -7,4 +7,8 @@ public class OnlineLog
     public DateOnly Day { get; set; }
 
     public int Sec { get; set; }
+
+    public int SecAban { get; set; }
+
+    public int SecAfk { get; set; }
 }
