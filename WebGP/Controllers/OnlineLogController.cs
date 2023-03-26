@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGP.Application.Common.VM;
 using WebGP.Application.Data.Queries.GetOnlineLogBy;
@@ -7,6 +8,7 @@ namespace WebGP.Controllers;
 
 [Route("online_log")]
 [ApiController]
+
 public class OnlineLogController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -15,13 +17,14 @@ public class OnlineLogController : ControllerBase
     {
         _mediator = mediator;
     }
-
+    [Authorize(Policy = "query_access")]
     [HttpGet("static_id/")]
     public Task<IDictionary<int, IEnumerable<OnlineLogVM>>> GetByTimedIdAll(
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to)
         => _mediator.Send(new GetOnlineLogByStaticIdQuery(null, from, to));
 
+    [Authorize(Policy = "query_access")]
     [HttpGet("static_id/{static_id}")]
     public Task<IDictionary<int, IEnumerable<OnlineLogVM>>> GetByTimedId(
         [FromRoute(Name = "static_id")] int? staticId,
@@ -29,12 +32,14 @@ public class OnlineLogController : ControllerBase
         [FromQuery(Name = "to")] DateOnly to)
         => _mediator.Send(new GetOnlineLogByStaticIdQuery(staticId, from, to));
 
+    [Authorize(Policy = "query_access")]
     [HttpGet("uuid/")]
     public Task<IDictionary<string, IEnumerable<OnlineLogVM>>> GetByUuidAll(
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to)
         => _mediator.Send(new GetOnlineLogByUuidQuery(null, from, to));
 
+    [Authorize(Policy = "query_access")]
     [HttpGet("uuid/{uuid}")]
     public Task<IDictionary<string, IEnumerable<OnlineLogVM>>> GetByUuid(
         [FromRoute(Name = "uuid")] string? uuid,
@@ -42,12 +47,14 @@ public class OnlineLogController : ControllerBase
         [FromQuery(Name = "to")] DateOnly to)
         => _mediator.Send(new GetOnlineLogByUuidQuery(uuid, from, to));
 
+    [Authorize(Policy = "query_access")]
     [HttpGet("user_name/")]
     public Task<IDictionary<string, IEnumerable<OnlineLogVM>>> GetByUserNameAll(
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to)
         => _mediator.Send(new GetOnlineLogByUserNameQuery(null, from, to));
 
+    [Authorize(Policy = "query_access")]
     [HttpGet("user_name/{user_name?}")]
     public Task<IDictionary<string, IEnumerable<OnlineLogVM>>> GetByUserName(
         [FromRoute(Name = "user_name")] string? userName,
