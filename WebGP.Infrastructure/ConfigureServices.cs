@@ -34,8 +34,8 @@ public static class ConfigureServices
             .GetValue<string>("RpGenerator:RunCommand")!);
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddTransient<IOnlineRepository, OnlineRepository>();   
-        services.AddTransient<IDiscordRepository, DiscordRepository>();
+        services.AddScoped<IOnlineRepository, OnlineRepository>();   
+        services.AddScoped<IDiscordRepository, DiscordRepository>();
         return services;
     }
 
