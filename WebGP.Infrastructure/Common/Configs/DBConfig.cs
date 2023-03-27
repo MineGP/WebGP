@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using MySqlConnector;
 using WebGP.Interfaces.Config;
 
 namespace WebGP.Infrastructure.Common.Configs;

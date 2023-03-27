@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿/*using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 using WebGP.Application.Common.Interfaces;
@@ -31,4 +31,4 @@ public class DiscordRepository : IDiscordRepository
     {
         return _connection.QueryAsync<DiscordVM>(SELECT_QUERY);
     }
-}
+}*/
