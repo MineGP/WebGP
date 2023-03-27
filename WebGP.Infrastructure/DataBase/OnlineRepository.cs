@@ -24,8 +24,8 @@ public class OnlineRepository : IOnlineRepository
             FROM online
             LEFT JOIN users ON users.uuid = online.uuid
             LEFT JOIN discord ON discord.uuid = online.uuid
-            LEFT JOIN role_work_readonly w ON users.`work` = r.id AND r.`type` = 'WORK'
-            LEFT JOIN role_work_readonly r ON users.`role` = w.id AND w.`type` = 'ROLE'";
+            LEFT JOIN role_work_readonly w ON users.`work` = w.id AND w.`type` = 'WORK'
+            LEFT JOIN role_work_readonly r ON users.`role` = r.id AND r.`type` = 'ROLE'";
 
     private const string WhereTimedId = @"
             WHERE online.timed_id = @timed_id";    
