@@ -13,8 +13,8 @@ public class DiscordRepository : IDiscordRepository
             SELECT
 	            discord.discord_id AS 'DiscordId',
 	            GetLevel(users.exp) AS 'Level',
-	            r.name AS 'Work',
-	            w.name AS 'Role',
+	            r.name AS 'Role',
+	            w.name AS 'Work',
                 users.phone AS 'Phone'
             FROM users
             INNER JOIN discord ON discord.uuid = users.uuid
