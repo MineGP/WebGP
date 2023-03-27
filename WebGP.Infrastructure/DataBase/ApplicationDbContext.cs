@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebGP.Application.Common.Interfaces;
+using WebGP.Application.Common.VM;
 using WebGP.Domain.Entities;
 
 namespace WebGP.Infrastructure.DataBase;
@@ -312,8 +313,44 @@ public partial class ApplicationDbContext : DbContext, IContext
             entity.Property(e => e.Name)
                 .HasColumnType("text")
                 .HasColumnName("name");
-        });
 
+        });
+        /*modelBuilder.Entity<OnlineVm>(entity =>
+        {
+            entity.HasNoKey();
+            entity.Property(e => e.TimedId)
+                .HasColumnName("timed_id")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.Uuid)
+                .HasColumnName("uuid")
+                .HasMaxLength(36);
+            entity.Property(e => e.StaticId)
+                .HasColumnName("id")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.FirstName)
+                .HasColumnName("first_name")
+                .HasMaxLength(15);
+            entity.Property(e => e.LastName)
+                .HasColumnName("last_name")
+                .HasMaxLength(15);
+            entity.Property(e => e.DiscordId)
+                .HasColumnName("discord_id")
+                .HasColumnType("bigint(20)");
+            entity.Property(e => e.Role)
+                .HasColumnName("role")
+                .HasColumnType("mediumtext")
+                .UseCollation("utf8mb4_unicode_ci");
+            entity.Property(e => e.Work)
+                .HasColumnName("work")
+                .HasColumnType("mediumtext")
+                .UseCollation("utf8mb4_unicode_ci");
+            entity.Property(e => e.Level)
+                .HasColumnName("Level")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.SkinUrl)
+                .HasColumnName("skin_url")
+                .HasColumnType("text");
+        });*/
         OnModelCreatingPartial(modelBuilder);
     }
 

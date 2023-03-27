@@ -34,6 +34,7 @@ public static class ConfigureServices
             .GetValue<string>("RpGenerator:RunCommand")!);
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IOnlineRepository, OnlineRepository>();
         return services;
     }
 

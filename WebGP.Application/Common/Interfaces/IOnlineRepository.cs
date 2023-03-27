@@ -5,11 +5,12 @@ namespace WebGP.Application.Common.Interfaces;
 
 public interface IOnlineRepository
 {
-    Task<IEnumerable<OnlineVM>> GetOnlineListAsync();
+    Task<OnlineVm?> GetOnlineByTimedIdAsync(int timedId, CancellationToken cancellationToken);
+    Task<IDictionary<int, OnlineVm>> GetAllOnlineByTimedIdAsync(CancellationToken cancellationToken);
+    Task<OnlineVm?> GetOnlineByUuidAsync(string uuid, CancellationToken cancellationToken);
+    Task<IDictionary<string, OnlineVm>> GetAllOnlineByUuidAsync(CancellationToken cancellationToken);
+    Task<OnlineVm?> GetOnlineByStaticIdAsync(uint staticId, CancellationToken cancellationToken);
+    Task<IDictionary<uint, OnlineVm>> GetAllOnlineByStaticIdAsync(CancellationToken cancellationToken);
 
-    Task<IEnumerable<OnlineLog>> GetOnlineLogListByUserNameAsync(string userName, DateTime from, DateTime to);
-    Task<IEnumerable<OnlineLog>> GetOnlineLogListByUuidAsync(string uuid, DateTime from, DateTime to);
-    Task<IEnumerable<OnlineLog>> GetOnlineLogListByStaticIDAsync(uint staticID, DateTime from, DateTime to);
-
-    Task<int> GetOnlineCountAsync();
+    Task<int> GetOnlineCountAsync(CancellationToken cancellationToken);
 }
