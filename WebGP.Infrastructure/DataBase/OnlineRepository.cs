@@ -52,7 +52,8 @@ public class OnlineRepository : IOnlineRepository
     {
         return await _context.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
-            .ToDictionaryAsync(v => v.TimedId, v => v, cancellationToken);
+            .Where(v => v.TimedId.HasValue)
+            .ToDictionaryAsync(v => v.TimedId!.Value, v => v, cancellationToken);
     }
 
     public async Task<OnlineVm?> GetOnlineByUuidAsync(string uuid, CancellationToken cancellationToken)
@@ -80,7 +81,8 @@ public class OnlineRepository : IOnlineRepository
     {
         return await _context.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
-            .ToDictionaryAsync(v => v.StaticId, v => v, cancellationToken);
+            .Where(v => v.StaticId.HasValue)
+            .ToDictionaryAsync(v => v.StaticId!.Value, v => v, cancellationToken);
     }
 
     public async Task<int> GetOnlineCountAsync(CancellationToken cancellationToken)
