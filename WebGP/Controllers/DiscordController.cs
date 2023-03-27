@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGP.Application.Common.VM;
-using WebGP.Application.Data.Queries.GetDiscordBy;
+using WebGP.Application.Data.Queries.Discord;
 
 namespace WebGP.Controllers;
 
@@ -16,8 +17,15 @@ public class DiscordController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("id/{id?}")]
-    public Task<IDictionary<long, DiscordVM>> GetByID(
-        [FromRoute(Name = "id")] long? id = null)
-        => _mediator.Send(new GetDiscordByIDQuery(id));
+    [HttpGet("id/{id}")]
+    [Authorize(Policy = "query_access")]
+    public Task<IDictionary<long, DiscordVm>> GetById(
+        [FromRoute(Name = "id")] long id,
+        CancellationToken cancellationToken)
+        => _mediator.Send(new GetDiscordByIdQuery(id), cancellationToken);
+
+    [HttpGet("id")]
+    [Authorize(Policy = "query_access")]
+    public Task<IDictionary<long, DiscordVm>> GetAll(CancellationToken cancellationToken)
+        => _mediator.Send(new GetAllDiscordsQuery(), cancellationToken);
 }
