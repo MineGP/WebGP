@@ -1,13 +1,7 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Text;
-using Dapper;
-using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
+﻿using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.VM;
-using WebGP.Domain.Entities;
 
 namespace WebGP.Infrastructure.DataBase;
 
@@ -49,54 +43,43 @@ public class OnlineRepository : IOnlineRepository
 
     public async Task<OnlineVm?> GetOnlineByTimedIdAsync(int timedId, CancellationToken cancellationToken)
     {
-        var query = SelectOnlineQuery + WhereTimedId + ';';
         return await _context.Database
-            .SqlQueryRaw<OnlineVm>(query, new SqlParameter("timed_id", timedId))
+            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereTimedId, new MySqlParameter("timed_id", timedId))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IDictionary<int, OnlineVm>> GetAllOnlineByTimedIdAsync(CancellationToken cancellationToken)
     {
-        var query = SelectOnlineQuery + ';';
-
         return await _context.Database
-            .SqlQueryRaw<OnlineVm>(query)
+            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
             .ToDictionaryAsync(v => v.TimedId, v => v, cancellationToken);
     }
 
     public async Task<OnlineVm?> GetOnlineByUuidAsync(string uuid, CancellationToken cancellationToken)
     {
-        var query = SelectOnlineQuery + WhereUuid + ';';
-
         return await _context.Database
-            .SqlQueryRaw<OnlineVm>(query, new SqlParameter("uuid", uuid))
+            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereUuid, new MySqlParameter("uuid", uuid))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IDictionary<string, OnlineVm>> GetAllOnlineByUuidAsync(CancellationToken cancellationToken)
     {
-        var query = SelectOnlineQuery + ';';
-
         return await _context.Database
-            .SqlQueryRaw<OnlineVm>(query)
+            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
             .ToDictionaryAsync(v => v.Uuid, v => v, cancellationToken);
     }
 
     public async Task<OnlineVm?> GetOnlineByStaticIdAsync(uint staticId, CancellationToken cancellationToken)
     {
-        var query = SelectOnlineQuery + WhereStaticId + ';';
-
         return await _context.Database
-            .SqlQueryRaw<OnlineVm>(query, new SqlParameter("id", staticId))
+            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereStaticId, new MySqlParameter("id", staticId))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IDictionary<uint, OnlineVm>> GetAllOnlineByStaticIdAsync(CancellationToken cancellationToken)
     {
-        var query = WhereStaticId + ';';
-
         return await _context.Database
-            .SqlQueryRaw<OnlineVm>(query)
+            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
             .ToDictionaryAsync(v => v.StaticId, v => v, cancellationToken);
     }
 
