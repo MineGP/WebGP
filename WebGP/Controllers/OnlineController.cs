@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGP.Application.Common.VM;
-using WebGP.Application.Data.Queries.GetOnlineBy;
+using WebGP.Application.Data.Queries.Online;
 
 namespace WebGP.Controllers;
 
@@ -17,16 +18,40 @@ public class OnlineController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "query_access")]
     public Task<int> GetOnline()
         => _mediator.Send(new GetOnlineCountQuery());
 
-    [HttpGet("id/{id?}")]
-    public Task<IDictionary<int, OnlineVM>> GetByID(
-        [FromRoute(Name = "id")] int? id = null)
-        => _mediator.Send(new GetOnlineByTimedIDQuery(id));
+    [HttpGet("timed_id")]
+    [Authorize(Policy = "query_access")]
+    public Task<IDictionary<int, OnlineVm>> GetByTimedId()
+        => _mediator.Send(new GetOnlineByTimedIdQuery(null));
 
-    [HttpGet("uuid/{uuid?}")]
-    public Task<IDictionary<string, OnlineVM>> GetByUUID(
-        [FromRoute(Name = "uuid")] string? uuid = null)
-        => _mediator.Send(new GetOnlineByUUIDQuery(uuid));
+    [HttpGet("timed_id/{timed_id}")]
+    [Authorize(Policy = "query_access")]
+    public Task<IDictionary<int, OnlineVm>> GetByTimedId(
+        [FromRoute(Name = "timed_id")] int timedId)
+        => _mediator.Send(new GetOnlineByTimedIdQuery(timedId));
+
+    [HttpGet("uuid")]
+    [Authorize(Policy = "query_access")]
+    public Task<IDictionary<string, OnlineVm>> GetByUuid()
+        => _mediator.Send(new GetOnlineByUuidQuery(null));
+
+    [HttpGet("uuid/{uuid}")]
+    [Authorize(Policy = "query_access")]
+    public Task<IDictionary<string, OnlineVm>> GetByUuid(
+        [FromRoute(Name = "uuid")] string uuid)
+        => _mediator.Send(new GetOnlineByUuidQuery(uuid));
+
+    [HttpGet("static_id")]
+    [Authorize(Policy = "query_access")]
+    public Task<IDictionary<uint, OnlineVm>> GetByStaticId()
+        => _mediator.Send(new GetOnlineByStaticIdQuery(null));
+
+    [HttpGet("static_id/{static_id}")]
+    [Authorize(Policy = "query_access")]
+    public Task<IDictionary<uint, OnlineVm>> GetByStaticId(
+        [FromRoute(Name = "static_id")] uint staticId)
+        => _mediator.Send(new GetOnlineByStaticIdQuery(staticId));
 }
