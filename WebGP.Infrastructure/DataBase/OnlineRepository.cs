@@ -67,7 +67,8 @@ public class OnlineRepository : IOnlineRepository
     {
         return await _context.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
-            .ToDictionaryAsync(v => v.Uuid, v => v, cancellationToken);
+            .Where(v => v.Uuid != null)
+            .ToDictionaryAsync(v => v.Uuid!, v => v, cancellationToken);
     }
 
     public async Task<OnlineVm?> GetOnlineByStaticIdAsync(uint staticId, CancellationToken cancellationToken)
