@@ -9,8 +9,8 @@ public class DiscordVm
     [JsonPropertyName("static_id")] public uint? StaticId { get; set; }
     [JsonPropertyName("first_name")] public string? FirstName { get; set; } = null!;
     [JsonPropertyName("last_name")] public string? LastName { get; set; } = null!;
-    [JsonPropertyName("work")] public string Work { get; set; } = null!;
-    [JsonPropertyName("role")] public string Role { get; set; } = null!;
+    [JsonPropertyName("work")] public string? Work { get; set; }
+    [JsonPropertyName("role")] public string? Role { get; set; }
     [JsonPropertyName("level")] public int Level { get; set; }
     [JsonPropertyName("phone")] public int? Phone { get; set; }
 }
