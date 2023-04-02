@@ -15,7 +15,11 @@ public class DiscordRepository : IDiscordRepository
 	            GetLevel(users.exp) AS 'Level',
 	            r.name AS 'Role',
 	            w.name AS 'Work',
-                users.phone AS 'Phone'
+                users.phone AS 'Phone',
+                users.id AS 'StaticId',
+                users.first_name AS 'FirstName',
+	            users.last_name AS 'LastName',
+                users.uuid AS 'Uuid'
             FROM users
             INNER JOIN discord ON discord.uuid = users.uuid
             LEFT JOIN role_work_readonly w ON users.`work` = w.id AND w.`type` = 'WORK'
