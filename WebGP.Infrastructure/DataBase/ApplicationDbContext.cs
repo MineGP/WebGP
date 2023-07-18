@@ -5,7 +5,7 @@ using WebGP.Domain.Entities;
 
 namespace WebGP.Infrastructure.DataBase;
 
-public partial class ApplicationDbContext : DbContext, IContext
+public partial class ApplicationDbContext : DbContext, IContextGPC, IContextGPO
 {
     public ApplicationDbContext()
     {
@@ -28,6 +28,8 @@ public partial class ApplicationDbContext : DbContext, IContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<WorkReadonly> WorkReadonlies { get; set; }
+
+    public DbContext DbContext => this;
 
     IQueryable<Discord> IContext.Discords => Discords;
     IQueryable<Online> IContext.Onlines => Onlines;

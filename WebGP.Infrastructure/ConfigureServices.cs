@@ -6,46 +6,53 @@ using WebGP.Application.Common.Interfaces;
 using WebGP.Infrastructure.Common.Configs;
 using WebGP.Infrastructure.DataBase;
 using WebGP.Infrastructure.Identity;
-using WebGP.Infrastructure.Scripts;
 using WebGP.Infrastructure.SelfDatabase;
 
 namespace WebGP.Infrastructure;
 
 public static class ConfigureServices
 {
+    private static IServiceCollection AddTypedDatabaseGp<TContext, TContextImplementation>(this IServiceCollection services,
+        IConfiguration configuration,
+        string key) 
+        where TContext : IContext
+        where TContextImplementation : DbContext, TContext
+    {
+        var connectionStringGp = configuration.GetRequiredSection($"DataBase:{key}").Get<DBConfig>()!.GetConnectionString();
+
+        return services.AddDbContext<TContext, TContextImplementation>(options => options
+            .UseMySql(connectionStringGp, ServerVersion.Create(10, 6, 12, ServerType.MariaDb)));
+    }
+
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
         var connectionStringSelf = configuration.GetRequiredSection("DataBase:Self").Get<DBConfig>()!.GetConnectionString();
-        var connectionStringGp = configuration.GetRequiredSection("DataBase:GP").Get<DBConfig>()!.GetConnectionString();
+        var connectionStringDonate = configuration.GetRequiredSection("DataBase:Donate").Get<DBConfig>()!.GetConnectionString();
 
-        services.AddJwtService(options =>
-        {
-            options.Key = configuration.GetValue<string>("Jwt:Key")!;
-            options.Audience = configuration.GetValue<string>("Jwt:Audience")!;
-            options.Issuer = configuration.GetValue<string>("Jwt:Issuer")!;
-        });
+        return services
+            .AddJwtService(options =>
+            {
+                options.Key = configuration.GetValue<string>("Jwt:Key")!;
+                options.Audience = configuration.GetValue<string>("Jwt:Audience")!;
+                options.Issuer = configuration.GetValue<string>("Jwt:Issuer")!;
+            })
 
-        services.AddDbContext<IContext, ApplicationDbContext>(options => options
-            .UseMySql(connectionStringGp, ServerVersion.Create(10, 6, 12, ServerType.MariaDb)));
-        services.AddDbContext<SelfDbContext>(options => options
-            .UseMySql(connectionStringSelf, ServerVersion.Create(10, 6, 12, ServerType.MariaDb)));
-        services.AddRpGenerator(options => options.RunCommand = configuration
-            .GetValue<string>("RpGenerator:RunCommand")!);
+            .AddTypedDatabaseGp<IContextGPO, ApplicationDbContext>(configuration, "GPO")
+            .AddTypedDatabaseGp<IContextGPC, ApplicationDbContext>(configuration, "GPC")
+            
+            .AddDbContext<DonateDbContext>(options => options
+                .UseMySql(connectionStringDonate, ServerVersion.Create(10, 6, 12, ServerType.MariaDb)))
+            .AddDbContext<SelfDbContext>(options => options
+                .UseMySql(connectionStringSelf, ServerVersion.Create(10, 6, 12, ServerType.MariaDb)))
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IOnlineRepository, OnlineRepository>();   
-        services.AddScoped<IDiscordRepository, DiscordRepository>();
-        return services;
+            .AddScoped<IUnitOfWork, UnitOfWork>()
+            .AddScoped<IOnlineRepository, OnlineRepository>()
+            .AddScoped<IDonateRepository, DonateRepository>()
+            .AddScoped<IDiscordRepository, DiscordRepository>();
     }
 
     private static IServiceCollection AddJwtService(this IServiceCollection services,
         Action<JwtServiceConfiguration> options)
         => services.AddTransient<IJwtService, JwtService>().Configure(options);
-
-    private static IServiceCollection AddRpGenerator(this IServiceCollection services,
-        Action<RpGenerator.Config> options)
-        => services
-            .AddSingleton<IRpGenerator, RpGenerator>()
-            .Configure(options);
 }

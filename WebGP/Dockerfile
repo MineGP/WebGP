@@ -1,16 +1,17 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-preview AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["WebGP/WebGP.csproj", "WebGP/"]
 COPY ["WebGP.Application/WebGP.Application.csproj", "WebGP.Application/"]
 COPY ["WebGP.Domain/WebGP.Domain.csproj", "WebGP.Domain/"]
 COPY ["WebGP.Infrastructure/WebGP.Infrastructure.csproj", "WebGP.Infrastructure/"]
+COPY ["WebGP.Diaka/WebGP.Diaka.csproj", "WebGP.Diaka/"]
 RUN dotnet restore "WebGP/WebGP.csproj"
 COPY . .
 WORKDIR "/src/WebGP"

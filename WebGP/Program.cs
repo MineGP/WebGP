@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using WebGP;
 using WebGP.Application;
+using WebGP.Diaka;
 using WebGP.Infrastructure;
 using WebGP.Infrastructure.DataBase;
 using WebGP.Infrastructure.SelfDatabase;
@@ -23,11 +24,13 @@ try
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddServerServices(builder.Configuration);
+    builder.Services.AddSingleton<DiakaListener>();
 
     builder.Host.UseSerilog();
 
     var app = builder.Build();
 
+    /*
     // MIGRATIONS FOR THE MAIN DB ONLY FOR DEV CONTAINERS
     if (app.Environment.IsDevelopment())
     {
@@ -41,6 +44,7 @@ try
         var db = scope.ServiceProvider.GetRequiredService<SelfDbContext>();
         db.Database.Migrate();
     }
+    */
 
     app.UseMiddleware<ErrorHandlingMiddleware>();
 
@@ -62,7 +66,7 @@ try
             var jwt = new JwtSecurityToken(
                 jwtConfig.Issuer,
                 jwtConfig.Audience,
-                expires: DateTime.UtcNow + TimeSpan.FromDays(360),
+                expires: DateTime.UtcNow + TimeSpan.FromDays(360 * 5),
                 claims: claims,
                 signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(),
                     SecurityAlgorithms.HmacSha256));
@@ -72,7 +76,7 @@ try
     }
 
     app.MapControllers();
-    app.Run();
+    Task.WaitAny(app.RunAsync(), app.Services.GetRequiredService<DiakaListener>().StartListen(CancellationToken.None));
 }
 catch (Exception e)
 {

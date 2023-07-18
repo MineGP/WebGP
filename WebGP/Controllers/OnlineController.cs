@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.VM;
 using WebGP.Application.Data.Queries.Online;
 
@@ -19,39 +20,46 @@ public class OnlineController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "query_access")]
-    public Task<int> GetOnline()
-        => _mediator.Send(new GetOnlineCountQuery());
+    public Task<int> GetOnline(
+        [FromQuery(Name = "type")] ContextType type)
+        => _mediator.Send(new GetOnlineCountQuery(type));
 
     [HttpGet("timed_id")]
     [Authorize(Policy = "query_access")]
-    public Task<IDictionary<int, OnlineVm>> GetByTimedId()
-        => _mediator.Send(new GetOnlineByTimedIdQuery(null));
+    public Task<IDictionary<int, OnlineVm>> GetByTimedId(
+        [FromQuery(Name = "type")] ContextType type)
+        => _mediator.Send(new GetOnlineByTimedIdQuery(type, null));
 
     [HttpGet("timed_id/{timed_id}")]
     [Authorize(Policy = "query_access")]
     public Task<IDictionary<int, OnlineVm>> GetByTimedId(
-        [FromRoute(Name = "timed_id")] int timedId)
-        => _mediator.Send(new GetOnlineByTimedIdQuery(timedId));
+        [FromRoute(Name = "timed_id")] int timedId,
+        [FromQuery(Name = "type")] ContextType type)
+        => _mediator.Send(new GetOnlineByTimedIdQuery(type, timedId));
 
     [HttpGet("uuid")]
     [Authorize(Policy = "query_access")]
-    public Task<IDictionary<string, OnlineVm>> GetByUuid()
-        => _mediator.Send(new GetOnlineByUuidQuery(null));
+    public Task<IDictionary<string, OnlineVm>> GetByUuid(
+        [FromQuery(Name = "type")] ContextType type)
+        => _mediator.Send(new GetOnlineByUuidQuery(type, null));
 
     [HttpGet("uuid/{uuid}")]
     [Authorize(Policy = "query_access")]
     public Task<IDictionary<string, OnlineVm>> GetByUuid(
-        [FromRoute(Name = "uuid")] string uuid)
-        => _mediator.Send(new GetOnlineByUuidQuery(uuid));
+        [FromRoute(Name = "uuid")] string uuid,
+        [FromQuery(Name = "type")] ContextType type)
+        => _mediator.Send(new GetOnlineByUuidQuery(type, uuid));
 
     [HttpGet("static_id")]
     [Authorize(Policy = "query_access")]
-    public Task<IDictionary<uint, OnlineVm>> GetByStaticId()
-        => _mediator.Send(new GetOnlineByStaticIdQuery(null));
+    public Task<IDictionary<uint, OnlineVm>> GetByStaticId(
+        [FromQuery(Name = "type")] ContextType type)
+        => _mediator.Send(new GetOnlineByStaticIdQuery(type, null));
 
     [HttpGet("static_id/{static_id}")]
     [Authorize(Policy = "query_access")]
     public Task<IDictionary<uint, OnlineVm>> GetByStaticId(
-        [FromRoute(Name = "static_id")] uint staticId)
-        => _mediator.Send(new GetOnlineByStaticIdQuery(staticId));
+        [FromRoute(Name = "static_id")] uint staticId,
+        [FromQuery(Name = "type")] ContextType type)
+        => _mediator.Send(new GetOnlineByStaticIdQuery(type, staticId));
 }

@@ -7,7 +7,8 @@ namespace WebGP.Infrastructure.DataBase;
 
 public class DiscordRepository : IDiscordRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IContextGPO _contextGPO;
+    private readonly IContextGPC _contextGPC;
 
     private const string SelectQuery = @"
             SELECT
@@ -28,24 +29,32 @@ public class DiscordRepository : IDiscordRepository
     private const string WhereDiscordId = @"
             WHERE discord.discord_id = @discord_id";
 
-    public DiscordRepository(ApplicationDbContext context)
+    public DiscordRepository(IContextGPO contextGPO, IContextGPC contextGPC)
     {
-        _context = context;
+        _contextGPO = contextGPO;
+        _contextGPC = contextGPC;
     }
 
-    public async Task<IDictionary<long, DiscordVm>> GetAllDiscordsAsync(CancellationToken cancellationToken)
+    private IContext GetBy(ContextType database) => database switch
     {
-        return await _context.Database
+        ContextType.GPO => _contextGPO,
+        ContextType.GPC => _contextGPC,
+        _ => throw new NotSupportedException($"ContextType '{database}' not support")
+    };
+
+    public async Task<IDictionary<long, DiscordVm>> GetAllDiscordsAsync(ContextType database, CancellationToken cancellationToken)
+    {
+        return await GetBy(database).DbContext.Database
             .SqlQueryRaw<DiscordVm>(SelectQuery)
             .ToDictionaryAsync(
-                v => v.DiscordId, 
-                v => v, 
+                v => v.DiscordId,
+                v => v,
                 cancellationToken);
     }
 
-    public async Task<DiscordVm?> GetByDiscordIdAsync(long discordId, CancellationToken cancellationToken)
+    public async Task<DiscordVm?> GetByDiscordIdAsync(ContextType database, long discordId, CancellationToken cancellationToken)
     {
-        return await _context.Database
+        return await GetBy(database).DbContext.Database
             .SqlQueryRaw<DiscordVm>(SelectQuery + WhereDiscordId, new MySqlParameter("discord_id", discordId))
             .SingleOrDefaultAsync(cancellationToken);
     }

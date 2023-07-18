@@ -21,4 +21,15 @@ public class DBConfig : IDBConfig
         ConnectionTimeout = 60,
         Pooling = false
     }.ConnectionString;
+    
+    public string GetConnectionString(string database) => new MySqlConnectionStringBuilder
+    {
+        Server = Server,
+        Port = Port,
+        Database = database,
+        UserID = User,
+        Password = Password,
+        ConnectionTimeout = 60,
+        Pooling = false
+    }.ConnectionString;
 }

@@ -10,13 +10,25 @@ services:
       - DataBase__Self__Password=${SELF_PASSWORD}
       - DataBase__Self__DataBase=${SELF_DB}
       - DataBase__Self__Server=${SELF_SERVER}
-      - DataBase__Self__Port=3306
+      - DataBase__Self__Port=${SELF_PORT}
+      
+      - DataBase__GPO__User=${GPO_USER}
+      - DataBase__GPO__Password=${GPO_PASSWORD}
+      - DataBase__GPO__DataBase=${GPO_DB}
+      - DataBase__GPO__Server=${GPO_SERVER}
+      - DataBase__GPO__Port=${GPO_PORT}
 
-      - DataBase__GP__User=${GP_USER}
-      - DataBase__GP__Password=${GP_PASSWORD}
-      - DataBase__GP__DataBase=${GP_DB}
-      - DataBase__GP__Server=${GP_SERVER}
-      - DataBase__GP__Port=3306
+      - DataBase__GPC__User=${GPC_USER}
+      - DataBase__GPC__Password=${GPC_PASSWORD}
+      - DataBase__GPC__DataBase=${GPC_DB}
+      - DataBase__GPC__Server=${GPC_SERVER}
+      - DataBase__GPC__Port=${GPC_PORT}
+
+      - DataBase__Donate__User=${DONATE_USER}
+      - DataBase__Donate__Password=${DONATE_PASSWORD}
+      - DataBase__Donate__DataBase=${DONATE_DB}
+      - DataBase__Donate__Server=${DONATE_SERVER}
+      - DataBase__Donate__Port=${DONATE_PORT}
 
       - JWT__Issuer=${JWT_ISSUER}
       - JWT__Audience=${JWT_AUDIENCE}

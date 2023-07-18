@@ -3,7 +3,7 @@ using WebGP.Application.Common.Interfaces;
 
 namespace WebGP.Application.Data.Queries.Online;
 
-public record GetOnlineCountQuery : IRequest<int>;
+public record GetOnlineCountQuery(ContextType Type) : IRequest<int>;
 
 public class GetOnlineCountQueryHandler : IRequestHandler<GetOnlineCountQuery, int>
 {
@@ -16,6 +16,6 @@ public class GetOnlineCountQueryHandler : IRequestHandler<GetOnlineCountQuery, i
 
     public Task<int> Handle(GetOnlineCountQuery request, CancellationToken cancellationToken)
     {
-        return _onlineRepository.GetOnlineCountAsync(cancellationToken);
+        return _onlineRepository.GetOnlineCountAsync(request.Type, cancellationToken);
     }
 }

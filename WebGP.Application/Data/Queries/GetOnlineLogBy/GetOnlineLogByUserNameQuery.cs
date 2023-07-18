@@ -4,25 +4,35 @@ using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.VM;
 
 namespace WebGP.Application.Data.Queries.GetOnlineLogBy;
-public record GetOnlineLogByUserNameQuery(string? UserName, DateOnly From, DateOnly To) : 
+public record GetOnlineLogByUserNameQuery(ContextType Type, string? UserName, DateOnly From, DateOnly To) : 
     IRequest<IDictionary<string, IEnumerable<OnlineLogVM>>>;
 
 public class GetOnlineLogByUserNameQueryHandler :
     IRequestHandler<GetOnlineLogByUserNameQuery, IDictionary<string, IEnumerable<OnlineLogVM>>>
 {
-    private readonly IContext _context;
-    public GetOnlineLogByUserNameQueryHandler(IContext context)
+    private readonly IContextGPO _contextGPO;
+    private readonly IContextGPC _contextGPC;
+
+    public GetOnlineLogByUserNameQueryHandler(IContextGPO contextGPO, IContextGPC contextGPC)
     {
-        _context = context;
+        _contextGPO = contextGPO;
+        _contextGPC = contextGPC;
     }
+
+    private IContext GetBy(ContextType database) => database switch
+    {
+        ContextType.GPO => _contextGPO,
+        ContextType.GPC => _contextGPC,
+        _ => throw new NotSupportedException($"ContextType '{database}' not support")
+    };
     public async Task<IDictionary<string, IEnumerable<OnlineLogVM>>> Handle(GetOnlineLogByUserNameQuery request, CancellationToken cancellationToken)
     {
         if (request.UserName is null)
         {
-            return await _context
+            return await GetBy(request.Type)
                 .OnlineLogs
                 .Where(v => v.Day >= request.From && v.Day <= request.To)
-                .Join(_context.Users, log => log.Id, usr => usr.Id, (log, usr) => new { Log = log, User = usr })
+                .Join(GetBy(request.Type).Users, log => log.Id, usr => usr.Id, (log, usr) => new { Log = log, User = usr })
                 .GroupBy(v => v.User.UserName)
                 .ToDictionaryAsync(v => v.Key, v => v
                     .Select(info => new OnlineLogVM
@@ -33,10 +43,10 @@ public class GetOnlineLogByUserNameQueryHandler :
                     cancellationToken: cancellationToken);
         }
 
-        var user = await _context.Users.SingleOrDefaultAsync(v => v.UserName == request.UserName, cancellationToken);
+        var user = await GetBy(request.Type).Users.SingleOrDefaultAsync(v => v.UserName == request.UserName, cancellationToken);
         if (user is null) return new Dictionary<string, IEnumerable<OnlineLogVM>>();
 
-        var logs = await _context
+        var logs = await GetBy(request.Type)
             .OnlineLogs
             .Where(v => v.Day >= request.From && v.Day <= request.To)
             .Where(v => v.Id == user.Id)

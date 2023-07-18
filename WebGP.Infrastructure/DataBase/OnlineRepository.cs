@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using MySqlConnector;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Application.Common.VM;
@@ -7,7 +8,8 @@ namespace WebGP.Infrastructure.DataBase;
 
 public class OnlineRepository : IOnlineRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IContextGPO _contextGPO;
+    private readonly IContextGPC _contextGPC;
 
     private const string SelectOnlineQuery = @"
             SELECT
@@ -36,58 +38,66 @@ public class OnlineRepository : IOnlineRepository
     private const string WhereStaticId = @"
             WHERE users.id = @id";
 
-    public OnlineRepository(ApplicationDbContext context)
+    public OnlineRepository(IContextGPO contextGPO, IContextGPC contextGPC)
     {
-        _context = context;
+        _contextGPO = contextGPO;
+        _contextGPC = contextGPC;
     }
 
-    public async Task<OnlineVm?> GetOnlineByTimedIdAsync(int timedId, CancellationToken cancellationToken)
+    private IContext GetBy(ContextType database) => database switch
     {
-        return await _context.Database
+        ContextType.GPO => _contextGPO,
+        ContextType.GPC => _contextGPC,
+        _ => throw new NotSupportedException($"ContextType '{database}' not support")
+    };
+
+    public async Task<OnlineVm?> GetOnlineByTimedIdAsync(ContextType database, int timedId, CancellationToken cancellationToken)
+    {
+        return await GetBy(database).DbContext.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereTimedId, new MySqlParameter("timed_id", timedId))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IDictionary<int, OnlineVm>> GetAllOnlineByTimedIdAsync(CancellationToken cancellationToken)
+    public async Task<IDictionary<int, OnlineVm>> GetAllOnlineByTimedIdAsync(ContextType database, CancellationToken cancellationToken)
     {
-        return await _context.Database
+        return await GetBy(database).DbContext.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
             .Where(v => v.TimedId.HasValue)
             .ToDictionaryAsync(v => v.TimedId!.Value, v => v, cancellationToken);
     }
 
-    public async Task<OnlineVm?> GetOnlineByUuidAsync(string uuid, CancellationToken cancellationToken)
+    public async Task<OnlineVm?> GetOnlineByUuidAsync(ContextType database, string uuid, CancellationToken cancellationToken)
     {
-        return await _context.Database
+        return await GetBy(database).DbContext.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereUuid, new MySqlParameter("uuid", uuid))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IDictionary<string, OnlineVm>> GetAllOnlineByUuidAsync(CancellationToken cancellationToken)
+    public async Task<IDictionary<string, OnlineVm>> GetAllOnlineByUuidAsync(ContextType database, CancellationToken cancellationToken)
     {
-        return await _context.Database
+        return await GetBy(database).DbContext.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
             .Where(v => v.Uuid != null)
             .ToDictionaryAsync(v => v.Uuid!, v => v, cancellationToken);
     }
 
-    public async Task<OnlineVm?> GetOnlineByStaticIdAsync(uint staticId, CancellationToken cancellationToken)
+    public async Task<OnlineVm?> GetOnlineByStaticIdAsync(ContextType database, uint staticId, CancellationToken cancellationToken)
     {
-        return await _context.Database
+        return await GetBy(database).DbContext.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereStaticId, new MySqlParameter("id", staticId))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IDictionary<uint, OnlineVm>> GetAllOnlineByStaticIdAsync(CancellationToken cancellationToken)
+    public async Task<IDictionary<uint, OnlineVm>> GetAllOnlineByStaticIdAsync(ContextType database, CancellationToken cancellationToken)
     {
-        return await _context.Database
+        return await GetBy(database).DbContext.Database
             .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
             .Where(v => v.StaticId.HasValue)
             .ToDictionaryAsync(v => v.StaticId!.Value, v => v, cancellationToken);
     }
 
-    public async Task<int> GetOnlineCountAsync(CancellationToken cancellationToken)
+    public async Task<int> GetOnlineCountAsync(ContextType database, CancellationToken cancellationToken)
     {
-        return await _context.Onlines.CountAsync(cancellationToken);
+        return await GetBy(database).Onlines.CountAsync(cancellationToken);
     }
 }

@@ -4,7 +4,7 @@ using WebGP.Application.Common.VM;
 
 namespace WebGP.Application.Data.Queries.Discord;
 
-public record GetDiscordByIdQuery(long DiscordId) : IRequest<IDictionary<long, DiscordVm>>;
+public record GetDiscordByIdQuery(ContextType Type, long DiscordId) : IRequest<IDictionary<long, DiscordVm>>;
 
 public class GetDiscordByQueryHandler :
     IRequestHandler<GetDiscordByIdQuery, IDictionary<long, DiscordVm>>
@@ -18,7 +18,7 @@ public class GetDiscordByQueryHandler :
 
     public async Task<IDictionary<long, DiscordVm>> Handle(GetDiscordByIdQuery request, CancellationToken cancellationToken)
     {
-        var discord = await _discordRepository.GetByDiscordIdAsync(request.DiscordId, cancellationToken);
+        var discord = await _discordRepository.GetByDiscordIdAsync(request.Type, request.DiscordId, cancellationToken);
         if (discord == null) return new Dictionary<long, DiscordVm>();
         return new Dictionary<long, DiscordVm>()
         {

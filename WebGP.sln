@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{16CBE57A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "Application.Tests\Application.Tests.csproj", "{6F5D615E-B3EA-47D3-A2BD-C46441BB887A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGP.Diaka", "WebGP.Diaka\WebGP.Diaka\WebGP.Diaka.csproj", "{AA021A9C-06FA-4887-8A9D-BAF978602C8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{6F5D615E-B3EA-47D3-A2BD-C46441BB887A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F5D615E-B3EA-47D3-A2BD-C46441BB887A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F5D615E-B3EA-47D3-A2BD-C46441BB887A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA021A9C-06FA-4887-8A9D-BAF978602C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA021A9C-06FA-4887-8A9D-BAF978602C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA021A9C-06FA-4887-8A9D-BAF978602C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA021A9C-06FA-4887-8A9D-BAF978602C8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{3B497276-48B9-4B3B-AB58-F4D03027E7B3} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
 		{79D97050-FD4A-4EAE-98D0-C603C43D70DC} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
 		{6F5D615E-B3EA-47D3-A2BD-C46441BB887A} = {4A82D7B3-2CC3-4857-9C5B-49AC707DE83C}
+		{AA021A9C-06FA-4887-8A9D-BAF978602C8E} = {801457E0-AEDA-4F7B-8A9C-827523ECAAD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF60AFB2-ACFE-4C22-A4E4-30695A9B0C7B}

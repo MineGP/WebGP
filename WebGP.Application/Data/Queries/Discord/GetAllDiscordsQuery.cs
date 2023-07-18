@@ -4,7 +4,7 @@ using WebGP.Application.Common.VM;
 
 namespace WebGP.Application.Data.Queries.Discord;
 
-public record GetAllDiscordsQuery : IRequest<IDictionary<long, DiscordVm>>;
+public record GetAllDiscordsQuery(ContextType Type) : IRequest<IDictionary<long, DiscordVm>>;
 
 public class GetAllDiscordsQueryHandler : IRequestHandler<GetAllDiscordsQuery, IDictionary<long, DiscordVm>>
 {
@@ -17,6 +17,6 @@ public class GetAllDiscordsQueryHandler : IRequestHandler<GetAllDiscordsQuery, I
 
     public Task<IDictionary<long, DiscordVm>> Handle(GetAllDiscordsQuery request, CancellationToken cancellationToken)
     {
-        return _discordRepository.GetAllDiscordsAsync(cancellationToken);
+        return _discordRepository.GetAllDiscordsAsync(request.Type, cancellationToken);
     }
 }

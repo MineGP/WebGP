@@ -4,6 +4,6 @@ namespace WebGP.Application.Common.Interfaces;
 
 public interface IDiscordRepository
 {
-    Task<IDictionary<long, DiscordVm>> GetAllDiscordsAsync(CancellationToken cancellationToken);
-    Task<DiscordVm?> GetByDiscordIdAsync(long discordId, CancellationToken cancellationToken);
+    Task<IDictionary<long, DiscordVm>> GetAllDiscordsAsync(ContextType database, CancellationToken cancellationToken);
+    Task<DiscordVm?> GetByDiscordIdAsync(ContextType database, long discordId, CancellationToken cancellationToken);
 }
