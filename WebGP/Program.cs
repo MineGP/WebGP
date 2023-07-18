@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +26,9 @@ try
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddServerServices(builder.Configuration);
     builder.Services.AddSingleton<DiakaListener>();
+    builder.Services
+        .AddControllers()
+        .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
     builder.Host.UseSerilog();
 
