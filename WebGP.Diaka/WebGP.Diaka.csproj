@@ -12,6 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\WebGP.Application\WebGP.Application.csproj" />
+    <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
   </ItemGroup>
 </Project>

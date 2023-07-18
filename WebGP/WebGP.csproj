@@ -36,7 +36,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
-        <ProjectReference Include="..\WebGP.Diaka\WebGP.Diaka\WebGP.Diaka.csproj" />
+        <ProjectReference Include="..\WebGP.Diaka\WebGP.Diaka.csproj" />
         <ProjectReference Include="..\WebGP.Domain\WebGP.Domain.csproj" />
         <ProjectReference Include="..\WebGP.Infrastructure\WebGP.Infrastructure.csproj" />
     </ItemGroup>
