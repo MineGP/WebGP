@@ -4,11 +4,6 @@ namespace WebGP.Infrastructure.DataBase;
 
 public class DonateDbContext : DbContext
 {
-    public DonateDbContext(DbContextOptions options) : base(options)
-    {
-    }
-
-    public DonateDbContext()
-    {
-    }
+    public DonateDbContext() { }
+    public DonateDbContext(DbContextOptions<DonateDbContext> options) : base(options) { }
 }
