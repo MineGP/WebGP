@@ -19,14 +19,9 @@ public static class ConfigureServices
         where TContextImplementation : DbContext, TContext
     {
         var connectionStringGp = configuration.GetRequiredSection($"DataBase:{key}").Get<DBConfig>()!.GetConnectionString();
-        Console.WriteLine($"Add typed {key}: {connectionStringGp}");
 
-        return services.AddDbContext<TContext, TContextImplementation>(options =>
-        {
-            Console.WriteLine($"Setup {key}: {connectionStringGp}");
-            options
-                .UseMySql(connectionStringGp, ServerVersion.Create(10, 6, 12, ServerType.MariaDb));
-        });
+        return services.AddDbContext<TContext, TContextImplementation>(options => options
+                .UseMySql(connectionStringGp, ServerVersion.Create(10, 6, 12, ServerType.MariaDb)));
     }
 
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
