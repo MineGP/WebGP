@@ -2,6 +2,7 @@
 
 public enum ContextType
 {
+    None,
     GPO,
     GPC
 }

@@ -9,12 +9,10 @@ public partial class ApplicationDbContext : DbContext, IContextGPC, IContextGPO
 {
     public ApplicationDbContext()
     {
-        Console.WriteLine("ADC.0:" + this.Database.ProviderName);
     }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-        Console.WriteLine("ADC.1:" + this.Database.ProviderName);
     }
 
     public virtual DbSet<Discord> Discords { get; set; }
