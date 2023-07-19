@@ -33,6 +33,8 @@ public class DiscordRepository : IDiscordRepository
     {
         _contextGPO = contextGPO;
         _contextGPC = contextGPC;
+        Console.WriteLine("GPO: " + contextGPO.DbContext.Database.GetConnectionString());
+        Console.WriteLine("GPC: " + contextGPC.DbContext.Database.GetConnectionString());
     }
 
     private IContext GetBy(ContextType database) => database switch
