@@ -35,6 +35,7 @@ public class DiscordRepository : IDiscordRepository
         _contextGPC = contextGPC;
         Console.WriteLine("GPO: " + contextGPO.DbContext.Database.GetConnectionString());
         Console.WriteLine("GPC: " + contextGPC.DbContext.Database.GetConnectionString());
+        Console.WriteLine("Equals: " + (contextGPO == contextGPC));
     }
 
     private IContext GetBy(ContextType database) => database switch
@@ -56,6 +57,7 @@ public class DiscordRepository : IDiscordRepository
 
     public async Task<DiscordVm?> GetByDiscordIdAsync(ContextType database, long discordId, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"Selected {database}: " + GetBy(database).DbContext.Database.GetConnectionString());
         return await GetBy(database).DbContext.Database
             .SqlQueryRaw<DiscordVm>(SelectQuery + WhereDiscordId, new MySqlParameter("discord_id", discordId))
             .SingleOrDefaultAsync(cancellationToken);

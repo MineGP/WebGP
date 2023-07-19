@@ -9,7 +9,7 @@ using WebGP.Infrastructure.DataBase;
 
 namespace WebGP.Infrastructure.DataBase.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(DbContextGPO))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

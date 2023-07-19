@@ -10,7 +10,7 @@ using WebGP.Infrastructure.DataBase;
 
 namespace WebGP.Infrastructure.DataBase.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(DbContextGPO))]
     [Migration("20230325170551_Initional")]
     partial class Initional
     {
