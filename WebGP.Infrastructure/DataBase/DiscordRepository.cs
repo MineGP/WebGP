@@ -13,7 +13,7 @@ public class DiscordRepository : IDiscordRepository
     private const string SelectQuery = @"
             SELECT
 	            discord.discord_id AS 'DiscordId',
-	            GetLevel(users.exp) AS 'Level',
+	            GetLevel(IFNULL(users.exp,0)) AS 'Level',
 	            r.name AS 'Role',
 	            w.name AS 'Work',
                 users.phone AS 'Phone',
@@ -21,8 +21,8 @@ public class DiscordRepository : IDiscordRepository
                 users.first_name AS 'FirstName',
 	            users.last_name AS 'LastName',
                 discord.uuid AS 'Uuid'
-            FROM users
-            LEFT JOIN discord ON discord.uuid = users.uuid
+            FROM discord
+            LEFT JOIN users ON discord.uuid = users.uuid
             LEFT JOIN role_work_readonly w ON users.`work` = w.id AND w.`type` = 'WORK'
             LEFT JOIN role_work_readonly r ON users.`role` = r.id AND r.`type` = 'ROLE'";
 
