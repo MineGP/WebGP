@@ -20,9 +20,9 @@ public class DiscordRepository : IDiscordRepository
                 users.id AS 'StaticId',
                 users.first_name AS 'FirstName',
 	            users.last_name AS 'LastName',
-                users.uuid AS 'Uuid'
+                discord.uuid AS 'Uuid'
             FROM users
-            INNER JOIN discord ON discord.uuid = users.uuid
+            LEFT JOIN discord ON discord.uuid = users.uuid
             LEFT JOIN role_work_readonly w ON users.`work` = w.id AND w.`type` = 'WORK'
             LEFT JOIN role_work_readonly r ON users.`role` = r.id AND r.`type` = 'ROLE'";
 

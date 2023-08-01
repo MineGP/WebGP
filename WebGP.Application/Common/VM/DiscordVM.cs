@@ -11,6 +11,6 @@ public class DiscordVm
     [JsonPropertyName("last_name")] public string? LastName { get; set; } = null!;
     [JsonPropertyName("work")] public string? Work { get; set; }
     [JsonPropertyName("role")] public string? Role { get; set; }
-    [JsonPropertyName("level")] public int Level { get; set; }
+    [JsonPropertyName("level")] public int? Level { get; set; }
     [JsonPropertyName("phone")] public int? Phone { get; set; }
 }
