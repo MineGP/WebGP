@@ -230,7 +230,7 @@ namespace WebGP.Infrastructure.DataBase
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
                 entity.Property(e => e.BirthdayDate)
-                    .HasColumnType("datetime")
+                    .HasMaxLength(30)
                     .HasColumnName("birthday_date");
                 entity.Property(e => e.CardId)
                     .HasColumnType("int(11)")

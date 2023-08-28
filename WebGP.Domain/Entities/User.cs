@@ -14,7 +14,7 @@ public class User
 
     public bool? Male { get; set; }
 
-    public DateTime BirthdayDate { get; set; }
+    public string BirthdayDate { get; set; } = null!;
 
     public int? Phone { get; set; }
 
