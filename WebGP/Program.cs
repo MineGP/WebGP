@@ -15,7 +15,11 @@ using WebGP.Interfaces.Config;
 using WebGP.Middlewares;
 using WebGP.Models.Config;
 
-Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
+    .WriteTo.Console()
+    .CreateLogger();
+
 try
 {
     var builder = WebApplication.CreateBuilder(args);
