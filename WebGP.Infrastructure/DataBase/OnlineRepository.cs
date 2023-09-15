@@ -11,7 +11,7 @@ public class OnlineRepository : IOnlineRepository
     private readonly IContextGPO _contextGPO;
     private readonly IContextGPC _contextGPC;
 
-    private const string SelectOnlineQuery = @"
+    private static string CreateSelectOnlineQuery(bool hasRace) => $@"
             SELECT
 	            online.timed_id AS 'TimedId',
 	            online.`uuid` AS 'Uuid',
@@ -21,13 +21,19 @@ public class OnlineRepository : IOnlineRepository
 	            discord.discord_id AS 'DiscordId',
 	            r.name AS 'Role',
 	            w.name AS 'Work',
+                {(hasRace ? "race_types.race" : "NULL")} AS 'Race',
 	            GetLevel(IFNULL(users.exp,0)) AS 'Level',
                 online.skin_url AS 'SkinUrl'
             FROM online
             LEFT JOIN users ON users.uuid = online.uuid
             LEFT JOIN discord ON discord.uuid = online.uuid
             LEFT JOIN role_work_readonly w ON users.`work` = w.id AND w.`type` = 'WORK'
-            LEFT JOIN role_work_readonly r ON users.`role` = r.id AND r.`type` = 'ROLE'";
+            LEFT JOIN role_work_readonly r ON users.`role` = r.id AND r.`type` = 'ROLE'
+            {(hasRace ? "LEFT JOIN race_types ON race_types.id = users.race_id" : "")}";
+
+    private static readonly string SelectOnlineQueryGPO = CreateSelectOnlineQuery(false);
+
+    private static readonly string SelectOnlineQueryGPC = CreateSelectOnlineQuery(true);
 
     private const string WhereTimedId = @"
             WHERE online.timed_id = @timed_id";    
@@ -50,18 +56,24 @@ public class OnlineRepository : IOnlineRepository
         ContextType.GPC => _contextGPC,
         _ => throw new NotSupportedException($"ContextType '{database}' not support")
     };
+    private string GetSelectBy(ContextType database) => database switch
+    {
+        ContextType.GPO => SelectOnlineQueryGPO,
+        ContextType.GPC => SelectOnlineQueryGPC,
+        _ => throw new NotSupportedException($"ContextType '{database}' not support")
+    };
 
     public async Task<OnlineVm?> GetOnlineByTimedIdAsync(ContextType database, int timedId, CancellationToken cancellationToken)
     {
         return await GetBy(database).DbContext.Database
-            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereTimedId, new MySqlParameter("timed_id", timedId))
+            .SqlQueryRaw<OnlineVm>(GetSelectBy(database) + WhereTimedId, new MySqlParameter("timed_id", timedId))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IDictionary<int, OnlineVm>> GetAllOnlineByTimedIdAsync(ContextType database, CancellationToken cancellationToken)
     {
         return await GetBy(database).DbContext.Database
-            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
+            .SqlQueryRaw<OnlineVm>(GetSelectBy(database))
             .Where(v => v.TimedId.HasValue)
             .ToDictionaryAsync(v => v.TimedId!.Value, v => v, cancellationToken);
     }
@@ -69,14 +81,14 @@ public class OnlineRepository : IOnlineRepository
     public async Task<OnlineVm?> GetOnlineByUuidAsync(ContextType database, string uuid, CancellationToken cancellationToken)
     {
         return await GetBy(database).DbContext.Database
-            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereUuid, new MySqlParameter("uuid", uuid))
+            .SqlQueryRaw<OnlineVm>(GetSelectBy(database) + WhereUuid, new MySqlParameter("uuid", uuid))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IDictionary<string, OnlineVm>> GetAllOnlineByUuidAsync(ContextType database, CancellationToken cancellationToken)
     {
         return await GetBy(database).DbContext.Database
-            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
+            .SqlQueryRaw<OnlineVm>(GetSelectBy(database))
             .Where(v => v.Uuid != null)
             .ToDictionaryAsync(v => v.Uuid!, v => v, cancellationToken);
     }
@@ -84,14 +96,14 @@ public class OnlineRepository : IOnlineRepository
     public async Task<OnlineVm?> GetOnlineByStaticIdAsync(ContextType database, uint staticId, CancellationToken cancellationToken)
     {
         return await GetBy(database).DbContext.Database
-            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery + WhereStaticId, new MySqlParameter("id", staticId))
+            .SqlQueryRaw<OnlineVm>(GetSelectBy(database) + WhereStaticId, new MySqlParameter("id", staticId))
             .SingleOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IDictionary<uint, OnlineVm>> GetAllOnlineByStaticIdAsync(ContextType database, CancellationToken cancellationToken)
     {
         return await GetBy(database).DbContext.Database
-            .SqlQueryRaw<OnlineVm>(SelectOnlineQuery)
+            .SqlQueryRaw<OnlineVm>(GetSelectBy(database))
             .Where(v => v.StaticId.HasValue)
             .ToDictionaryAsync(v => v.StaticId!.Value, v => v, cancellationToken);
     }
