@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebGP.Diaka;
 
@@ -11,10 +12,23 @@ public static class Utils
         LogLevel = config.LogLevel,
         UseSystemClock = config.UseSystemClock
     };
+    public static bool TryGetFirst<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> data, TKey[] keys, [MaybeNullWhen(false)] out TValue? value)
+    {
+        foreach (TKey key in keys)
+            if (data.TryGetValue(key, out value))
+                return true;
+        value = default;
+        return false;
+    }
 
-    public static readonly Emoji WHITE_CHECK_MARK = ":white_check_mark:";
-    public static readonly Emoji NEGATIVE_SQUARED_CROSS_MARK = ":negative_squared_cross_mark:";
-
+    public static readonly IEmote[] OK_MARK = new IEmote[] {
+        Emote.Parse("<:ok:1154624576844738572>"),
+        Emoji.Parse(":white_check_mark:")
+    };
+    public static readonly IEmote[] ERROR_MARK = new IEmote[] {
+        Emote.Parse("<:error:1154624618246713384>"),
+        Emoji.Parse(":negative_squared_cross_mark:")
+    };
     public static async Task<string?> GetUserUUID(string userName)
     {
         try

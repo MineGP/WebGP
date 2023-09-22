@@ -40,10 +40,10 @@ public class DiakaListener
         {
             if (message is IUserMessage userMessage && userMessage.Author.IsWebhook)
             {
-                if (userMessage.Reactions.TryGetValue(Utils.WHITE_CHECK_MARK, out ReactionMetadata m_ok) && m_ok.IsMe) continue;
-                if (userMessage.Reactions.TryGetValue(Utils.NEGATIVE_SQUARED_CROSS_MARK, out ReactionMetadata m_error) && m_error.IsMe) continue;
+                if (userMessage.Reactions.TryGetFirst(Utils.OK_MARK, out ReactionMetadata m_ok) && m_ok.IsMe) continue;
+                if (userMessage.Reactions.TryGetFirst(Utils.ERROR_MARK, out ReactionMetadata m_error) && m_error.IsMe) continue;
                 if (DonateData.TryParse(userMessage, out DonateData? data)) queue.Enqueue(data);
-                else await userMessage.AddReactionAsync(Utils.NEGATIVE_SQUARED_CROSS_MARK);
+                else await userMessage.AddReactionAsync(Utils.ERROR_MARK[0]);
             }
         }
         listener.OnMessageReceived += async (args) =>
@@ -52,7 +52,7 @@ public class DiakaListener
             {
                 if (await channel.GetMessageAsync(args.MessageID) is not IUserMessage message || !message.Author.IsWebhook) return;
                 if (DonateData.TryParse(message, out DonateData? data)) queue.Enqueue(data);
-                else await message.AddReactionAsync(Utils.NEGATIVE_SQUARED_CROSS_MARK);
+                else await message.AddReactionAsync(Utils.ERROR_MARK[0]);
             }
             catch (Exception e)
             {
@@ -83,7 +83,7 @@ public class DiakaListener
             string? uuid = await Utils.GetUserUUID(data.UserName);
             try
             {
-                await data.Message.AddReactionAsync(Utils.WHITE_CHECK_MARK);
+                await data.Message.AddReactionAsync(Utils.OK_MARK[0]);
                 Console.WriteLine("New donate: " + data.UserName + " " + data.Amount + "₴");
 
                 await _repository.AddPreDonateAsync(userName, uuid, amount, "DIAKA", cancellationToken);
