@@ -38,6 +38,8 @@ public static class ConfigureServices
                 options.Issuer = configuration.GetValue<string>("Jwt:Issuer")!;
             })
 
+            .AddSingleton<ITimedStorage, MemoryTimedStorage>()
+
             .AddTypedDatabaseGp<IContextGPO, DbContextGPO>(configuration, "GPO")
             .AddTypedDatabaseGp<IContextGPC, DbContextGPC>(configuration, "GPC")
             

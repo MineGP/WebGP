@@ -1,17 +1,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using WebGP;
 using WebGP.Application;
+using WebGP.Application.Common.Interfaces;
 using WebGP.Diaka;
 using WebGP.Infrastructure;
-using WebGP.Infrastructure.DataBase;
-using WebGP.Infrastructure.SelfDatabase;
 using WebGP.Interfaces.Config;
+using WebGP.Java;
 using WebGP.Middlewares;
 using WebGP.Models.Config;
 
@@ -30,6 +28,7 @@ try
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddServerServices(builder.Configuration);
     builder.Services.AddSingleton<DiakaListener>();
+    builder.Services.AddSingleton<IJavaService, JavaService>();
     builder.Services
         .AddControllers()
         .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
