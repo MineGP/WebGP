@@ -19,6 +19,8 @@ public class JavaService : IJavaService
                 return true;
         return false;
     }
+    public Task ClearVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
+        => MainApp.ClearVersion(gameVersion, buildVersion, cancellationToken).AsTask();
 
     private static async IAsyncEnumerable<IFrame> ExecuteFrameEnumerableAsync(Task task, JavaDataLogger logger, [EnumeratorCancellation] CancellationToken cancellationToken)
     {

@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.11.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
     <ProjectReference Include="..\WebGP.Infrastructure\WebGP.Infrastructure.csproj" />
   </ItemGroup>
