@@ -18,13 +18,15 @@ public class AuthController : Controller
     [HttpPost("new_token")]
     [Authorize(Policy = "full_access")]
     public Task<string> CreateNewUserToken(
-        [FromBody] CreateAdminTokenQuery model)
-        => _mediator.Send(model);
+        [FromBody] CreateAdminTokenQuery model,
+        CancellationToken cancellationToken)
+        => _mediator.Send(model, cancellationToken);
 
     [HttpPost("get_access")]
     [AllowAnonymous]
     public Task<string> GetNewAccessToken(
-        [FromBody] GetAccessTokenQuery model)
-        => _mediator.Send(model);
+        [FromBody] GetAccessTokenQuery model,
+        CancellationToken cancellationToken)
+        => _mediator.Send(model, cancellationToken);
 
 }

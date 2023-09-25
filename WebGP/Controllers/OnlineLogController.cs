@@ -23,8 +23,9 @@ public class OnlineLogController : ControllerBase
     public Task<IDictionary<int, IEnumerable<OnlineLogVM>>> GetByTimedIdAll(
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to,
-        [FromQuery(Name = "type")] ContextType type)
-        => _mediator.Send(new GetOnlineLogByStaticIdQuery(type, null, from, to));
+        [FromQuery(Name = "type")] ContextType type,
+        CancellationToken cancellationToken)
+        => _mediator.Send(new GetOnlineLogByStaticIdQuery(type, null, from, to), cancellationToken);
 
     [Authorize(Policy = "query_access")]
     [HttpGet("static_id/{static_id}")]
@@ -32,16 +33,18 @@ public class OnlineLogController : ControllerBase
         [FromRoute(Name = "static_id")] int? staticId,
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to,
-        [FromQuery(Name = "type")] ContextType type)
-        => _mediator.Send(new GetOnlineLogByStaticIdQuery(type, staticId, from, to));
+        [FromQuery(Name = "type")] ContextType type,
+        CancellationToken cancellationToken)
+        => _mediator.Send(new GetOnlineLogByStaticIdQuery(type, staticId, from, to), cancellationToken);
 
     [Authorize(Policy = "query_access")]
     [HttpGet("uuid/")]
     public Task<IDictionary<string, IEnumerable<OnlineLogVM>>> GetByUuidAll(
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to,
-        [FromQuery(Name = "type")] ContextType type)
-        => _mediator.Send(new GetOnlineLogByUuidQuery(type, null, from, to));
+        [FromQuery(Name = "type")] ContextType type,
+        CancellationToken cancellationToken)
+        => _mediator.Send(new GetOnlineLogByUuidQuery(type, null, from, to), cancellationToken);
 
     [Authorize(Policy = "query_access")]
     [HttpGet("uuid/{uuid}")]
@@ -49,16 +52,18 @@ public class OnlineLogController : ControllerBase
         [FromRoute(Name = "uuid")] string? uuid,
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to,
-        [FromQuery(Name = "type")] ContextType type)
-        => _mediator.Send(new GetOnlineLogByUuidQuery(type, uuid, from, to));
+        [FromQuery(Name = "type")] ContextType type,
+        CancellationToken cancellationToken)
+        => _mediator.Send(new GetOnlineLogByUuidQuery(type, uuid, from, to), cancellationToken);
 
     [Authorize(Policy = "query_access")]
     [HttpGet("user_name/")]
     public Task<IDictionary<string, IEnumerable<OnlineLogVM>>> GetByUserNameAll(
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to,
-        [FromQuery(Name = "type")] ContextType type)
-        => _mediator.Send(new GetOnlineLogByUserNameQuery(type, null, from, to));
+        [FromQuery(Name = "type")] ContextType type,
+        CancellationToken cancellationToken)
+        => _mediator.Send(new GetOnlineLogByUserNameQuery(type, null, from, to), cancellationToken);
 
     [Authorize(Policy = "query_access")]
     [HttpGet("user_name/{user_name?}")]
@@ -66,6 +71,7 @@ public class OnlineLogController : ControllerBase
         [FromRoute(Name = "user_name")] string? userName,
         [FromQuery(Name = "from")] DateOnly from,
         [FromQuery(Name = "to")] DateOnly to,
-        [FromQuery(Name = "type")] ContextType type)
-        => _mediator.Send(new GetOnlineLogByUserNameQuery(type, userName, from, to));
+        [FromQuery(Name = "type")] ContextType type,
+        CancellationToken cancellationToken)
+        => _mediator.Send(new GetOnlineLogByUserNameQuery(type, userName, from, to), cancellationToken);
 }
