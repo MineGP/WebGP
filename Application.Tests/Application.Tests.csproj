@@ -9,6 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="data\**" />
+      <EmbeddedResource Remove="data\**" />
+      <None Remove="data\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="NUnit" Version="3.13.3" />
@@ -25,10 +31,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="data\" />
+        <ProjectReference Include="..\WebGP.Java\WebGP.Java.csproj" />
     </ItemGroup>
 
 </Project>
