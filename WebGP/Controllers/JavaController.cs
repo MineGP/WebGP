@@ -50,7 +50,6 @@ public class JavaController : ControllerBase
 
     private async Task<ActionResult> SendFramesQuery(IStreamRequest<IFrame> query, CancellationToken cancellationToken)
     {
-        Response.StatusCode = 200;
         Response.ContentType = "text/event-stream";
         Response.Headers.CacheControl = "no-cache";
         Response.Headers.Connection = "keep-alive";
