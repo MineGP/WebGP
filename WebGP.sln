@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP", "WebGP\WebGP.csproj", "{DA0CF8EE-D680-4691-92B9-FD2A2A597299}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP", "src\WebGP\WebGP.csproj", "{DA0CF8EE-D680-4691-92B9-FD2A2A597299}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Application", "WebGP.Application\WebGP.Application.csproj", "{E1365FBE-527F-42D2-88A6-996BC2122FBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Application", "src\WebGP.Application\WebGP.Application.csproj", "{E1365FBE-527F-42D2-88A6-996BC2122FBF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Infrastructure", "WebGP.Infrastructure\WebGP.Infrastructure.csproj", "{3B497276-48B9-4B3B-AB58-F4D03027E7B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Infrastructure", "src\WebGP.Infrastructure\WebGP.Infrastructure.csproj", "{3B497276-48B9-4B3B-AB58-F4D03027E7B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Domain", "WebGP.Domain\WebGP.Domain.csproj", "{79D97050-FD4A-4EAE-98D0-C603C43D70DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Domain", "src\WebGP.Domain\WebGP.Domain.csproj", "{79D97050-FD4A-4EAE-98D0-C603C43D70DC}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C0CB4CFE-196A-4FC5-ADD4-337F2D18555B}"
 EndProject
@@ -25,11 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{16CBE57A
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "Application.Tests\Application.Tests.csproj", "{6F5D615E-B3EA-47D3-A2BD-C46441BB887A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "tests\Application.Tests\Application.Tests.csproj", "{6F5D615E-B3EA-47D3-A2BD-C46441BB887A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Diaka", "WebGP.Diaka\WebGP.Diaka.csproj", "{AA021A9C-06FA-4887-8A9D-BAF978602C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGP.Diaka", "src\WebGP.Diaka\WebGP.Diaka.csproj", "{AA021A9C-06FA-4887-8A9D-BAF978602C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGP.Java", "WebGP.Java\WebGP.Java.csproj", "{2A5FA551-400E-4478-913A-A122C7C1CD82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGP.Java", "src\WebGP.Java\WebGP.Java.csproj", "{2A5FA551-400E-4478-913A-A122C7C1CD82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -30,8 +30,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\WebGP.Application\WebGP.Application.csproj" />
-        <ProjectReference Include="..\WebGP.Java\WebGP.Java.csproj" />
+      <ProjectReference Include="..\..\src\WebGP.Application\WebGP.Application.csproj" />
+      <ProjectReference Include="..\..\src\WebGP.Java\WebGP.Java.csproj" />
     </ItemGroup>
 
 </Project>
