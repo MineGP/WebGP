@@ -7,11 +7,11 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["WebGP/WebGP.csproj", "WebGP/"]
-COPY ["WebGP.Application/WebGP.Application.csproj", "WebGP.Application/"]
-COPY ["WebGP.Domain/WebGP.Domain.csproj", "WebGP.Domain/"]
-COPY ["WebGP.Infrastructure/WebGP.Infrastructure.csproj", "WebGP.Infrastructure/"]
-COPY ["WebGP.Diaka/WebGP.Diaka.csproj", "WebGP.Diaka/"]
+COPY ["src/WebGP/WebGP.csproj", "WebGP/"]
+COPY ["src/WebGP.Application/WebGP.Application.csproj", "WebGP.Application/"]
+COPY ["src/WebGP.Domain/WebGP.Domain.csproj", "WebGP.Domain/"]
+COPY ["src/WebGP.Infrastructure/WebGP.Infrastructure.csproj", "WebGP.Infrastructure/"]
+COPY ["src/WebGP.Diaka/WebGP.Diaka.csproj", "WebGP.Diaka/"]
 RUN dotnet restore "WebGP/WebGP.csproj"
 COPY . .
 WORKDIR "/src/WebGP"
