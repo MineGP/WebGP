@@ -7,7 +7,7 @@ EXPOSE 443
 
 FROM curlimages/curl:8.3.0 AS java
 WORKDIR /
-RUN curl https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz | tar -xz
+RUN sudo curl https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz | tar -xz
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src

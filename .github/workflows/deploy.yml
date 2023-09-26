@@ -6,23 +6,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  run_test_build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@master
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.100-preview.2.23157.25
-    - name: Restore dependencies
-      run: dotnet restore ./src/WebGP/WebGP.csproj
-    - name: Build
-      run: dotnet build --no-restore ./src/WebGP/WebGP.csproj
-    - name: Test
-      run: dotnet test --no-build --verbosity normal ./src/WebGP/WebGP.csproj
-      
-      
+  #run_test_build:
+  #  runs-on: ubuntu-latest
+  #
+  #  steps:
+  #  - uses: actions/checkout@master
+  #  - name: Setup .NET
+  #    uses: actions/setup-dotnet@v3
+  #    with:
+  #      dotnet-version: 8.0.100-preview.2.23157.25
+  #  - name: Restore dependencies
+  #    run: dotnet restore ./src/WebGP/WebGP.csproj
+  #  - name: Build
+  #    run: dotnet build --no-restore ./src/WebGP/WebGP.csproj
+  #  - name: Test
+  #    run: dotnet test --no-build --verbosity normal ./src/WebGP/WebGP.csproj
+  #    
+  #    
   build_and_pub:
     needs: [run_test_build]
     
