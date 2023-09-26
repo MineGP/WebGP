@@ -5,6 +5,10 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+FROM curlimages/curl:8.3.0 AS java
+WORKDIR /
+RUN curl https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz | tar -xz
+
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/WebGP/WebGP.csproj", "src/WebGP/"]
@@ -22,6 +26,9 @@ FROM build AS publish
 RUN dotnet publish "WebGP.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+WORKDIR /
+COPY --from=java /graalvm-jdk-17.0.8+9.1 /java
+ENV PATH="${PATH}:/java/bin"
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "WebGP.dll"]
