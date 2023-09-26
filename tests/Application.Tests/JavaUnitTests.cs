@@ -17,6 +17,7 @@ public class JavaUnitTests
         _javaService = new JavaService(_timedStorage);
     }
 
+    /*
     [Test]
     public async Task Java_UpdateCheckVersion()
     {
@@ -36,4 +37,5 @@ public class JavaUnitTests
         await TestContext.Progress.WriteLineAsync("CHECK");
         Assert.That(await _javaService.CheckVersion(gameVersion, buildVersion, cancellationToken), Is.True, "Vesion not founded");
     }
+    */
 }

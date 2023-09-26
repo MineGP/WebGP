@@ -20,6 +20,9 @@ public class DiakaListener
     private readonly string _token;
     private readonly ulong _channelID;
 
+    public static bool IsEnable(IConfiguration configuration) 
+        => !string.IsNullOrWhiteSpace(configuration.GetRequiredSection("Diaka").GetValue<string>("Token"));
+
     public DiakaListener(IConfiguration config, IDonateRepository repository)
     {
         IConfigurationSection diaka = config.GetRequiredSection("Diaka");

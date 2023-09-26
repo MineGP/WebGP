@@ -1,8 +1,10 @@
 ﻿using Java.Mapper.App;
+using Java.Mapper.DataLogger;
+using Java.Mapper.DataLogger.Frame;
 using System.Runtime.CompilerServices;
 using WebGP.Application.Common.Interfaces;
-using WebGP.Java.DataLogger;
-using WebGP.Java.Frames;
+using IWebFrame = WebGP.Application.Common.Interfaces.IFrame;
+using IJavaFrame = Java.Mapper.DataLogger.Frame.IFrame;
 
 namespace WebGP.Java;
 
@@ -22,39 +24,62 @@ public class JavaService : IJavaService
     public Task ClearVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
         => MainApp.ClearVersion(gameVersion, buildVersion, cancellationToken).AsTask();
 
-    private static async IAsyncEnumerable<IFrame> ExecuteFrameEnumerableAsync(Task task, JavaDataLogger logger, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private static async IAsyncEnumerable<IWebFrame> ExecuteFrameEnumerableAsync(Task task, FrameDataLogger logger, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         while (!task.IsCompleted)
         {
             await Task.Delay(100, cancellationToken);
-            while (logger.TryDequeueFrame(out IFrame? frame))
-                yield return frame;
+            while (logger.TryDequeueFrame(out IJavaFrame? frame))
+                yield return new ProxyFrame(frame);
         }
 
         await Task.Delay(100, cancellationToken);
-        while (logger.TryDequeueFrame(out IFrame? frame))
-            yield return frame;
+        while (logger.TryDequeueFrame(out IJavaFrame? frame))
+            yield return new ProxyFrame(frame);
     }
-    public IAsyncEnumerable<IFrame> UpdateVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
+    public IAsyncEnumerable<IWebFrame> UpdateVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
     {
-        JavaDataLogger logger = new JavaDataLogger();
+        FrameDataLogger logger = new FrameDataLogger();
         Task task = MainApp.UnMapper(logger, gameVersion, buildVersion, null, cancellationToken).AsTask();
         return ExecuteFrameEnumerableAsync(task, logger, cancellationToken);
     }
-    public IAsyncEnumerable<IFrame> ApplyVersion(string gameVersion, int buildVersion, Stream inputFile, CancellationToken cancellationToken)
+    public IAsyncEnumerable<IWebFrame> ApplyVersion(string gameVersion, int buildVersion, Stream inputFile, CancellationToken cancellationToken)
     {
-        JavaDataLogger logger = new JavaDataLogger();
+        FrameDataLogger logger = new FrameDataLogger();
         string outputFileName = Guid.NewGuid().ToString("N");
-        async IAsyncEnumerable<IFrame> Loader([EnumeratorCancellation] CancellationToken cancellationToken)
+        async IAsyncEnumerable<IWebFrame> Loader([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             using MemoryStream outputStream = new MemoryStream();
-            Task task = MainApp.Mapper(logger, inputFile, outputStream, gameVersion, buildVersion, cancellationToken).AsTask();
-            await foreach (IFrame frame in ExecuteFrameEnumerableAsync(task, logger, cancellationToken))
+            using MemoryStream inputStream = new MemoryStream();
+            await inputFile.CopyToAsync(inputStream, cancellationToken);
+            inputStream.Seek(0, SeekOrigin.Begin);
+            File.WriteAllBytes("test.jar", inputStream.ToArray());
+            inputStream.Seek(0, SeekOrigin.Begin);
+
+            Exception? exception = null;
+
+            async Task ErrorTask(CancellationToken cancellationToken)
+            {
+                try
+                {
+                    await MainApp.Mapper(logger, inputStream, outputStream, gameVersion, buildVersion, cancellationToken);
+                }
+                catch (Exception e)
+                {
+                    exception = e;
+                }
+            }
+
+            Task task = ErrorTask(cancellationToken);
+            await foreach (IWebFrame frame in ExecuteFrameEnumerableAsync(task, logger, cancellationToken))
                 yield return frame;
+
+            if (exception is not null)
+                throw new Exception("Error execute apply version", exception);
 
             outputStream.Seek(0, SeekOrigin.Begin);
             await _timedStorage.WriteFileAsync($"java:{outputFileName}", outputStream, TimeSpan.FromMinutes(5), cancellationToken);
-            yield return new ShareFrame(outputFileName);
+            yield return new ProxyFrame(new ShareFrame(outputFileName));
         }
         return Loader(cancellationToken);
     }

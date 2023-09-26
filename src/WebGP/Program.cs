@@ -8,6 +8,7 @@ using WebGP.Application;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Diaka;
 using WebGP.Infrastructure;
+using WebGP.Infrastructure.Common.Configs;
 using WebGP.Interfaces.Config;
 using WebGP.Java;
 using WebGP.Middlewares;
@@ -27,7 +28,11 @@ try
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
     builder.Services.AddServerServices(builder.Configuration);
-    builder.Services.AddSingleton<DiakaListener>();
+
+    bool isDiakaEnable = DiakaListener.IsEnable(builder.Configuration);
+    if (isDiakaEnable)
+        builder.Services.AddSingleton<DiakaListener>();
+
     builder.Services.AddSingleton<IJavaService, JavaService>();
     builder.Services
         .AddControllers()
@@ -78,12 +83,17 @@ try
                 signingCredentials: new SigningCredentials(jwtConfig.GetSecurityKey(),
                     SecurityAlgorithms.HmacSha256));
 
-            return Results.Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
+            string token = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return Results.Ok(token);
         });
     }
 
     app.MapControllers();
-    Task.WaitAny(app.RunAsync(), app.Services.GetRequiredService<DiakaListener>().StartListen(CancellationToken.None));
+    List<Task> runTasks = new List<Task> { app.RunAsync() };
+    if (isDiakaEnable)
+        runTasks.Add(app.Services.GetRequiredService<DiakaListener>().StartListen(CancellationToken.None));
+    Task.WaitAny(runTasks.ToArray());
 }
 catch (Exception e)
 {
