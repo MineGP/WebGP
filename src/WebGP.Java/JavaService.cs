@@ -16,13 +16,13 @@ public class JavaService : IJavaService
 
     public async Task<bool> CheckVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
     {
-        await foreach ((string _gameVersion, int _buildVersion) in MainApp.GetAllVersions(cancellationToken))
+        await foreach ((string _gameVersion, int _buildVersion) in PaperApp.GetAllVersions(cancellationToken))
             if (gameVersion == _gameVersion && buildVersion == _buildVersion)
                 return true;
         return false;
     }
     public Task ClearVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
-        => MainApp.ClearVersion(gameVersion, buildVersion, cancellationToken).AsTask();
+        => PaperApp.ClearVersion(gameVersion, buildVersion, cancellationToken).AsTask();
 
     private static async IAsyncEnumerable<IWebFrame> ExecuteFrameEnumerableAsync(Task task, FrameDataLogger logger, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -40,7 +40,7 @@ public class JavaService : IJavaService
     public IAsyncEnumerable<IWebFrame> UpdateVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
     {
         FrameDataLogger logger = new FrameDataLogger();
-        Task task = MainApp.UnMapper(logger, gameVersion, buildVersion, null, cancellationToken).AsTask();
+        Task task = PaperApp.UnMapper(logger, gameVersion, buildVersion, null, cancellationToken).AsTask();
         return ExecuteFrameEnumerableAsync(task, logger, cancellationToken);
     }
     public IAsyncEnumerable<IWebFrame> ApplyVersion(string gameVersion, int buildVersion, Stream inputFile, CancellationToken cancellationToken)
@@ -62,7 +62,7 @@ public class JavaService : IJavaService
             {
                 try
                 {
-                    await MainApp.Mapper(logger, inputStream, outputStream, gameVersion, buildVersion, cancellationToken);
+                    await PluginApp.Mapper(logger, inputStream, outputStream, gameVersion, buildVersion, cancellationToken);
                 }
                 catch (Exception e)
                 {
@@ -85,4 +85,6 @@ public class JavaService : IJavaService
     }
     public Task<Stream?> GetApplyVersion(string name, CancellationToken cancellationToken)
         => _timedStorage.ReadFileAsync($"java:{name}", true, cancellationToken);
+    public Task<Stream?> GetSourceVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
+        => PaperApp.GetSourceVersion(gameVersion, buildVersion, cancellationToken).AsTask();
 }

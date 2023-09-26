@@ -7,10 +7,12 @@ public record CheckJavaVersionQuery(string GameVersion, int BuildVersion) : IReq
 public record UpdateJavaVersionQuery(string GameVersion, int BuildVersion) : IStreamRequest<IFrame>;
 public record ApplyJavaVersionQuery(string GameVersion, int BuildVersion, Stream InputFile) : IStreamRequest<IFrame>;
 public record GetApplyJavaVersionQuery(string Name) : IRequest<Stream?>;
+public record GetSourcesJavaVersionQuery(string GameVersion, int BuildVersion) : IRequest<Stream?>;
 
 public class JavaVersionQueryHandler :
     IRequestHandler<CheckJavaVersionQuery, bool>,
     IRequestHandler<GetApplyJavaVersionQuery, Stream?>,
+    IRequestHandler<GetSourcesJavaVersionQuery, Stream?>,
     IStreamRequestHandler<UpdateJavaVersionQuery, IFrame>,
     IStreamRequestHandler<ApplyJavaVersionQuery, IFrame>
 {
@@ -26,4 +28,6 @@ public class JavaVersionQueryHandler :
         => _javaService.ApplyVersion(request.GameVersion, request.BuildVersion, request.InputFile, cancellationToken);
     public Task<Stream?> Handle(GetApplyJavaVersionQuery request, CancellationToken cancellationToken)
         => _javaService.GetApplyVersion(request.Name, cancellationToken);
+    public Task<Stream?> Handle(GetSourcesJavaVersionQuery request, CancellationToken cancellationToken)
+        => _javaService.GetSourceVersion(request.GameVersion, request.BuildVersion, cancellationToken);
 }
