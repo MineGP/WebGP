@@ -1,4 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
@@ -7,14 +7,15 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["src/WebGP/WebGP.csproj", "WebGP/"]
-COPY ["src/WebGP.Application/WebGP.Application.csproj", "WebGP.Application/"]
-COPY ["src/WebGP.Domain/WebGP.Domain.csproj", "WebGP.Domain/"]
-COPY ["src/WebGP.Infrastructure/WebGP.Infrastructure.csproj", "WebGP.Infrastructure/"]
-COPY ["src/WebGP.Diaka/WebGP.Diaka.csproj", "WebGP.Diaka/"]
-RUN dotnet restore "WebGP/WebGP.csproj"
+COPY ["src/WebGP/WebGP.csproj", "src/WebGP/"]
+COPY ["src/WebGP.Application/WebGP.Application.csproj", "src/WebGP.Application/"]
+COPY ["src/WebGP.Domain/WebGP.Domain.csproj", "src/WebGP.Domain/"]
+COPY ["src/WebGP.Diaka/WebGP.Diaka.csproj", "src/WebGP.Diaka/"]
+COPY ["src/WebGP.Infrastructure/WebGP.Infrastructure.csproj", "src/WebGP.Infrastructure/"]
+COPY ["src/WebGP.Java/WebGP.Java.csproj", "src/WebGP.Java/"]
+RUN dotnet restore "src/WebGP/WebGP.csproj"
 COPY . .
-WORKDIR "/src/WebGP"
+WORKDIR "/src/src/WebGP"
 RUN dotnet build "WebGP.csproj" -c Release -o /app/build
 
 FROM build AS publish
