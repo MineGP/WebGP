@@ -79,7 +79,7 @@ public class JavaController : ControllerBase
         await foreach (IFrame frame in _mediator.CreateStream(query, cancellationToken))
         {
             DateTime now = DateTime.Now;
-            if (last is not (IFrame lastFrame, DateTime lastTime) || now < lastTime || frame.IsRequired(lastFrame))
+            if (last is not (IFrame lastFrame, DateTime lastTime) || now > lastTime || frame.IsRequired(lastFrame))
                 await HttpContext.SSESendAsync(new PacketSSE(null, frame.Type, frame.Data), cancellationToken);
             last = (frame, now.AddSeconds(0.25));
         }
