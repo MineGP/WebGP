@@ -85,6 +85,6 @@ public class JavaService : IJavaService
     }
     public Task<Stream?> GetApplyVersion(string name, CancellationToken cancellationToken)
         => _timedStorage.ReadFileAsync($"java:{name}", true, cancellationToken);
-    public Task<Stream?> GetSourceVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
-        => PaperApp.GetSourceVersion(gameVersion, buildVersion, cancellationToken).AsTask();
+    public Task<Stream?> GetFullVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
+        => PaperApp.GetFullVersion(gameVersion, buildVersion, cancellationToken).AsTask();
 }

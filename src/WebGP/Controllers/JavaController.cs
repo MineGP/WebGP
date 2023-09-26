@@ -50,14 +50,14 @@ public class JavaController : ControllerBase
         ? File(stream, MimeTypes.GetMimeType(".jar"))
         : NotFound();
 
-    [HttpGet("version/sources")]
+    [HttpGet("version/full")]
     [Authorize(Policy = "script_access")]
-    public async Task<ActionResult> GetSourcesVersion(
+    public async Task<ActionResult> GetFullVersion(
         [FromQuery(Name = "game")] string gameVersion,
         [FromQuery(Name = "build")] int buildVersion,
         CancellationToken cancellationToken)
-        => await _mediator.Send(new GetSourcesJavaVersionQuery(gameVersion, buildVersion), cancellationToken) is Stream stream
-        ? File(stream, MimeTypes.GetMimeType(".jar"))
+        => await _mediator.Send(new GetFullJavaVersionQuery(gameVersion, buildVersion), cancellationToken) is Stream stream
+        ? File(stream, MimeTypes.GetMimeType(".zip"))
         : NotFound();
 
     [HttpGet("version/test")]

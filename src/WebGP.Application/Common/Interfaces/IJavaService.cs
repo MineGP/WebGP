@@ -7,5 +7,5 @@ public interface IJavaService
     IAsyncEnumerable<IFrame> UpdateVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken);
     IAsyncEnumerable<IFrame> ApplyVersion(string gameVersion, int buildVersion, Stream inputFile, CancellationToken cancellationToken);
     Task<Stream?> GetApplyVersion(string name, CancellationToken cancellationToken);
-    Task<Stream?> GetSourceVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken);
+    Task<Stream?> GetFullVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken);
 }
