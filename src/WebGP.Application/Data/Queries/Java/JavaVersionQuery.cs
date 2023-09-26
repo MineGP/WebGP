@@ -29,5 +29,5 @@ public class JavaVersionQueryHandler :
     public Task<Stream?> Handle(GetApplyJavaVersionQuery request, CancellationToken cancellationToken)
         => _javaService.GetApplyVersion(request.Name, cancellationToken);
     public Task<Stream?> Handle(GetFullJavaVersionQuery request, CancellationToken cancellationToken)
-        => _javaService.GetSourceVersion(request.GameVersion, request.BuildVersion, cancellationToken);
+        => _javaService.GetFullVersion(request.GameVersion, request.BuildVersion, cancellationToken);
 }
