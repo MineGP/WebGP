@@ -2,7 +2,7 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /
-RUN curl https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz | tar -xz
+RUN wget -c https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz -O - | tar -xz
 ENV PATH="${PATH}:/graalvm-jdk-17.0.8+9.1/bin"
 WORKDIR /app
 EXPOSE 80
