@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Rest;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 using System.Collections.Concurrent;
 using WebGP.Application.Common.Interfaces;
 using WebGP.Diaka.Discord;
@@ -15,6 +16,7 @@ public class DiakaListener
         DefaultRetryMode = RetryMode.AlwaysRetry
     };
 
+    private readonly ILogger _logger;
     private readonly IDonateRepository _repository;
 
     private readonly string _token;
@@ -23,12 +25,13 @@ public class DiakaListener
     public static bool IsEnable(IConfiguration configuration) 
         => !string.IsNullOrWhiteSpace(configuration.GetRequiredSection("Diaka").GetValue<string>("Token"));
 
-    public DiakaListener(IConfiguration config, IDonateRepository repository)
+    public DiakaListener(ILogger logger, IConfiguration config, IDonateRepository repository)
     {
         IConfigurationSection diaka = config.GetRequiredSection("Diaka");
         _token = diaka.GetValue<string>("Token")!;
         _channelID = diaka.GetValue<ulong>("ChannelID");
 
+        _logger = logger;
         _repository = repository;
     }
 
@@ -59,7 +62,7 @@ public class DiakaListener
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                _logger.Error(e, "Message received error");
             }
         };
         await listener.Start(_token);
@@ -72,7 +75,7 @@ public class DiakaListener
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                _logger.Error(e, "Update predonate error");
             }
 
             if (!queue.TryDequeue(out DonateData? data))
@@ -93,7 +96,7 @@ public class DiakaListener
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                _logger.Error(e, "Update predonate error");
             }
         }
     }

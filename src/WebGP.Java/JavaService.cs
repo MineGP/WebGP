@@ -5,14 +5,19 @@ using System.Runtime.CompilerServices;
 using WebGP.Application.Common.Interfaces;
 using IWebFrame = WebGP.Application.Common.Interfaces.IFrame;
 using IJavaFrame = Java.Mapper.DataLogger.Frame.IFrame;
+using Serilog;
 
 namespace WebGP.Java;
 
 public class JavaService : IJavaService
 {
+    private readonly ILogger _logger;
     private readonly ITimedStorage _timedStorage;
-    public JavaService(ITimedStorage timedStorage)
-        => _timedStorage = timedStorage;
+    public JavaService(ILogger logger, ITimedStorage timedStorage)
+    {
+        _logger = logger;
+        _timedStorage = timedStorage;
+    }
 
     public async Task<bool> CheckVersion(string gameVersion, int buildVersion, CancellationToken cancellationToken)
     {
@@ -53,8 +58,6 @@ public class JavaService : IJavaService
             using MemoryStream inputStream = new MemoryStream();
             await inputFile.CopyToAsync(inputStream, cancellationToken);
             inputStream.Seek(0, SeekOrigin.Begin);
-            File.WriteAllBytes("test.jar", inputStream.ToArray());
-            inputStream.Seek(0, SeekOrigin.Begin);
 
             Exception? exception = null;
 
@@ -66,6 +69,7 @@ public class JavaService : IJavaService
                 }
                 catch (Exception e)
                 {
+                    _logger.Error(e, "Error execute mapper");
                     exception = e;
                 }
             }
