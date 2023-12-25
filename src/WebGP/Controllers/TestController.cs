@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace WebGP.Controllers;
@@ -22,13 +23,14 @@ public class TestController : ControllerBase
     }
 
     [HttpPost("cache/webhook")]
-    public string PostWebhookCache(
-        [FromQuery(Name = "id")] string id)
+    public async Task<string> PostWebhookCache(
+        [FromQuery(Name = "id")] string id, 
+        CancellationToken cancellationToken)
     {
         try
         {
             WebhookCacheWithTick();
-            webhookCache[id] = new TimeoutJson(JsonNode.Parse(Request.Body)!.AsObject(), DateTime.Now.AddMinutes(1));
+            webhookCache[id] = new TimeoutJson((await JsonSerializer.DeserializeAsync<JsonObject>(Request.Body, cancellationToken: cancellationToken))!, DateTime.Now.AddMinutes(1));
             return "ok";
         }
         catch (Exception e)
