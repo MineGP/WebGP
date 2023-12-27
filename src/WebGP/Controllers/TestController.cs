@@ -22,7 +22,7 @@ public class TestController : ControllerBase
         }
     }
 
-    [HttpPost("cache/webhook")]
+    [HttpPost("cache/webhook/send")]
     public async Task<string> PostWebhookCache(
         [FromQuery(Name = "id")] string id, 
         CancellationToken cancellationToken)
@@ -39,7 +39,7 @@ public class TestController : ControllerBase
         }
     }
 
-    [HttpGet("cache/webhook")]
+    [HttpGet("cache/webhook/get")]
     public string GetWebhookCache(
         [FromQuery(Name = "id")] string id)
     {
