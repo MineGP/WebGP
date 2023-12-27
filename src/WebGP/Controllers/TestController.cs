@@ -22,7 +22,7 @@ public class TestController : ControllerBase
         }
     }
 
-    [HttpPost("cache/webhook/send")]
+    [HttpPost("cache/webhook")]
     public async Task<string> PostWebhookCache(
         [FromQuery(Name = "id")] string id,
         CancellationToken cancellationToken)
@@ -38,8 +38,40 @@ public class TestController : ControllerBase
             return e.ToString();
         }
     }
+    [HttpGet("cache/webhook")]
+    public string GetWebhookCache(
+        [FromQuery(Name = "id")] string id)
+    {
+        try
+        {
+            WebhookCacheWithTick();
+            return webhookCache.TryRemove(id, out var value) ? value.Data.ToJsonString() : "null";
+        }
+        catch (Exception e)
+        {
+            return e.ToString();
+        }
+    }
+
+
+    [HttpPost("cache/webhook/send")]
+    public async Task<string> PostWebhookCacheSend(
+        [FromQuery(Name = "id")] string id,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            WebhookCacheWithTick();
+            webhookCache[id] = new TimeoutJson((await JsonSerializer.DeserializeAsync<JsonObject>(Request.Body, cancellationToken: cancellationToken))!, DateTime.Now.AddMinutes(1));
+            return "ok";
+        }
+        catch (Exception e)
+        {
+            return e.ToString();
+        }
+    }
     [HttpGet("cache/webhook/raw")]
-    public async Task<string> RawWebhookCache(
+    public async Task<string> GetWebhookCacheRaw(
         [FromQuery(Name = "id")] string id,
         CancellationToken cancellationToken)
     {
@@ -56,7 +88,7 @@ public class TestController : ControllerBase
     }
 
     [HttpGet("cache/webhook/get")]
-    public string GetWebhookCache(
+    public string GetWebhookCacheGet(
         [FromQuery(Name = "id")] string id)
     {
         try
