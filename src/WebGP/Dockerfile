@@ -5,7 +5,7 @@ WORKDIR /
 RUN  apt-get update \
   && apt-get install -y wget \
   && rm -rf /var/lib/apt/lists/* \
-  && wget --no-verbose -c https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz -O - | tar -xz
+  && wget --no-verbose -c https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz -O - | tar -xz \
   && mv /graalvm-jdk-17.0.8+9.1/ /jdk/
 ENV PATH="${PATH}:/jdk/bin"
 WORKDIR /app
