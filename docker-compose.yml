@@ -6,7 +6,7 @@ services:
     container_name: WebGP
     build:
       context: .
-      dockerfile: WebGP/Dockerfile
+      dockerfile: src/WebGP/Dockerfile
     networks:
       - gp_net
     depends_on:
