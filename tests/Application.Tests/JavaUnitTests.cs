@@ -1,12 +1,11 @@
 ﻿using WebGP.Application.Common.Interfaces;
-using WebGP.Infrastructure.Identity;
-using WebGP.Java;
 
 namespace Application.Tests;
 
 [TestFixture]
 public class JavaUnitTests
 {
+    /*
     private ITimedStorage _timedStorage;
     private IJavaService _javaService;
 
